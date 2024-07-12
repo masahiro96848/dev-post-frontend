@@ -1,8 +1,14 @@
-import { Box, ChakraProps } from '@chakra-ui/react'
-import { FC, PropsWithChildren } from 'react'
+import { Box } from '@chakra-ui/react'
+import { FC } from 'react'
 
-export const PageRoot: FC<PropsWithChildren<ChakraProps>> = ({
+type Props = {
+  children: React.ReactNode
+  backgroundColor?: string
+}
+
+export const PageRoot: FC<Props> = ({
   children,
+  backgroundColor,
   ...props
 }) => {
   return (
@@ -11,6 +17,7 @@ export const PageRoot: FC<PropsWithChildren<ChakraProps>> = ({
       minHeight="100vh"
       display="flex"
       flexDirection="column"
+      backgroundColor={backgroundColor}
       {...props}
     >
       {children}
