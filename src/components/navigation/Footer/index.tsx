@@ -1,5 +1,4 @@
-import { Box, ChakraProps, Link } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { Box, ChakraProps } from '@chakra-ui/react'
 import React, { FC } from 'react'
 
 export const Footer: FC<ChakraProps> = ({ ...props }) => {
@@ -10,13 +9,13 @@ export const Footer: FC<ChakraProps> = ({ ...props }) => {
       justifyContent="space-between"
       height="50px"
       px={6}
-      backgroundColor="gray.50"
+      backgroundColor="gray.200"
       {...props}
     >
       <Box color="gray.600">Customer Management</Box>
-      <NextLink href="">
+      {/* <NextLink href="">
         <Link>お問い合わせ</Link>
-      </NextLink>
+      </NextLink> */}
     </Box>
   )
 }

@@ -9,7 +9,7 @@ export const Header: FC<ChakraProps> = ({ ...props }) => {
       justifyContent="flex-start"
       height="72px"
       px={6}
-      background="white"
+      background="orange.400"
       borderBottom="0.5px solid"
       borderBottomColor="gray.200"
       {...props}
