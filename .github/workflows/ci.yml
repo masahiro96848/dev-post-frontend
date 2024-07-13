@@ -4,11 +4,8 @@ on:
   push:
 
 jobs:
-  eslint:
+  lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: front
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
