@@ -14,7 +14,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install packages
+        working-directory: front
         run: npm install
 
       - name: Run lint
+        working-directory: front
         run: npm run lint
+
+      - name: Run format
+        working-directory: front
+        run: npm run format
