@@ -31,6 +31,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# graphql
+**/*.gen.*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

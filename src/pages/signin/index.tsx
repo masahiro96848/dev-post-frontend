@@ -11,12 +11,20 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import React, { FC } from 'react'
+import { usePagesSigninIndexQuery } from './index.gen'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 
 const SigninPage: FC<ChakraProps> = () => {
+  const { data, error, loading } = usePagesSigninIndexQuery()
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error.message}</p>
+
+  console.log(data)
+
   return (
     <PageRoot backgroundColor="gray.50">
       <Header />

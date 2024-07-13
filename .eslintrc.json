@@ -25,5 +25,6 @@
         "tabWidth": 2
       }
     ]
-  }
+  },
+  "ignorePatterns": ["**/node_modules/**", "**/*.gen.*"]
 }
