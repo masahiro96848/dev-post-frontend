@@ -1,4 +1,3 @@
-import { useQuery, gql } from '@apollo/client'
 import {
   Box,
   Button,
@@ -12,24 +11,19 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import React, { FC } from 'react'
+import { usePagesSigninIndexQuery } from './index.gen'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 
 const SigninPage: FC<ChakraProps> = () => {
-  const FETCH_USERS = gql`
-    query {
-      users {
-        id
-        email
-      }
-    }
-  `
+  const { data, error, loading } = usePagesSigninIndexQuery()
 
-  const { data: { users } = {} } = useQuery(FETCH_USERS)
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error.message}</p>
 
-  console.log(users)
+  console.log(data)
 
   return (
     <PageRoot backgroundColor="gray.50">

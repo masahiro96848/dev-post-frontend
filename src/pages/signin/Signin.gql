@@ -1,0 +1,4 @@
+fragment Pages_Users on User {
+  id
+  email
+}
