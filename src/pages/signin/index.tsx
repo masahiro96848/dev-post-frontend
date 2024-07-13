@@ -1,3 +1,4 @@
+import { useQuery, gql } from '@apollo/client'
 import {
   Box,
   Button,
@@ -17,6 +18,19 @@ import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 
 const SigninPage: FC<ChakraProps> = () => {
+  const FETCH_USERS = gql`
+    query {
+      users {
+        id
+        email
+      }
+    }
+  `
+
+  const { data: { users } = {} } = useQuery(FETCH_USERS)
+
+  console.log(users)
+
   return (
     <PageRoot backgroundColor="gray.50">
       <Header />
