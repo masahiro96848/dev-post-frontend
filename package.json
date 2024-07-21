@@ -1,5 +1,5 @@
 {
-  "name": "front",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,8 @@
     "graphql": "^16.9.0",
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",
@@ -30,6 +31,8 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-apollo": "^4.3.0",
+    "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "@tanstack/react-query": "^5.51.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -52,7 +55,6 @@
     "*.{ts,tsx}": [
       "eslint --fix --cache",
       "prettier --write",
-      "npm run lint",
       "npm run format"
     ]
   }

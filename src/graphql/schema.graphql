@@ -1,8 +1,36 @@
 type User {
-    id: ID!
-    email: String
+  id: ID!
+  email: String
+  created_at: String
+  updated_at: String
 }
 
 type Query {
   users: User
+}
+
+input SigninInput {
+  email: String!
+  password: String!
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+type Mutation {
+  signin(input: SigninInput!): SigninPayload
+  signup(input: SignupInput!): SignupPayload
+}
+
+type SigninPayload {
+  user: User
+  errors: [String!]
+}
+
+type SignupPayload {
+  user: User
+  errors: [String!]
 }
