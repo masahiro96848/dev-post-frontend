@@ -1,0 +1,8 @@
+mutation Pages_Signup($input: SignupInput!) {
+  signup(input: $input) {
+    user {
+      email
+    }
+    errors
+  }
+}
