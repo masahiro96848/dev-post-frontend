@@ -18,6 +18,7 @@ export const PageRoot: FC<Props> = ({
       display="flex"
       flexDirection="column"
       backgroundColor={backgroundColor}
+      paddingTop="72px"
       {...props}
     >
       {children}
