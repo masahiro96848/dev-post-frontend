@@ -36,6 +36,10 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings },
 ]
 
+/**
+ * ChakraUI Templates
+ * https://chakra-templates.vercel.app/navigation/sidebar
+ */
 export const Sidebar: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
