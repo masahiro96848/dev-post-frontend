@@ -4,6 +4,10 @@ import { FC } from 'react'
 export const Header: FC<ChakraProps> = ({ ...props }) => {
   return (
     <Box
+      position="fixed"
+      top="0"
+      width="100%"
+      zIndex="1000"
       display="flex"
       alignItems="center"
       justifyContent="space-between"
