@@ -1,12 +1,13 @@
 type User {
-  id: ID!
-  email: String
+  id: ID
+  email: String!
+  name: String
   created_at: String
   updated_at: String
 }
 
 type Query {
-  users: User
+  viewer: User!
 }
 
 input SigninInput {
