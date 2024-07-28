@@ -1,11 +1,13 @@
+import { useRouter } from 'next/router'
 import React from 'react'
 import { Signin } from './Signin'
 import { usePagesSigninMutation } from './index.gen'
 
 const SigninPage = () => {
+  const router = useRouter()
   const [signin] = usePagesSigninMutation({
-    onCompleted(data) {
-      console.log('Login successful:', data)
+    onCompleted() {
+      router.push('/dashboard')
     },
     onError: (error) => console.log('Error:', error.message),
   })

@@ -1,0 +1,10 @@
+query Pages_Dashboard_Viewer {
+  viewer {
+    ...Pages_Dashboard_User
+  }
+}
+
+fragment Pages_Dashboard_User on User {
+  id
+  email
+}
