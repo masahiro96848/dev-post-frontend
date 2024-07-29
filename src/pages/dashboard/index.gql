@@ -7,4 +7,5 @@ query Pages_Dashboard_Viewer {
 fragment Pages_Dashboard_User on User {
   id
   email
+  name
 }

@@ -1,7 +1,16 @@
-import { Box, ChakraProps, Link } from '@chakra-ui/react'
+import { Box, Button, Flex, Link, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { User } from '@/types/graphql.gen'
 
-export const Header: FC<ChakraProps> = ({ ...props }) => {
+type Props = {
+  viewer?: User
+}
+
+export const Header: FC<Props> = (props: Props) => {
+  const { viewer } = props
+  const router = useRouter()
+
   return (
     <Box
       position="fixed"
@@ -16,21 +25,37 @@ export const Header: FC<ChakraProps> = ({ ...props }) => {
       background="orange.400"
       borderBottom="0.5px solid"
       borderBottomColor="gray.200"
-      {...props}
     >
       <Box>
         <Link href="/" color="white" fontSize="lg" mr={4}>
           Customer Management
         </Link>
       </Box>
-      <Box>
-        <Link href="/signin" color="white" fontSize="lg" mr={4}>
-          ログイン
-        </Link>
-        <Link href="/signup" color="white" fontSize="lg">
-          新規登録
-        </Link>
-      </Box>
+      {viewer ? (
+        <Box>
+          <Flex alignItems="center">
+            <Text color="white" fontSize="lg" mr={4}>
+              {viewer.name}
+            </Text>
+            <Button
+              onClick={() => {
+                router.push('/signout')
+              }}
+            >
+              ログアウト
+            </Button>
+          </Flex>
+        </Box>
+      ) : (
+        <Box>
+          <Link href="/signin" color="white" fontSize="lg" mr={4}>
+            ログイン
+          </Link>
+          <Link href="/signup" color="white" fontSize="lg">
+            新規登録
+          </Link>
+        </Box>
+      )}
     </Box>
   )
 }

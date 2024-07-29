@@ -21,9 +21,14 @@ input SignupInput {
   passwordConfirmation: String!
 }
 
+input SignoutInput {
+  userId: String
+}
+
 type Mutation {
   signin(input: SigninInput!): SigninPayload
   signup(input: SignupInput!): SignupPayload
+  signout(input: SignoutInput!): Boolean!
 }
 
 type SigninPayload {
