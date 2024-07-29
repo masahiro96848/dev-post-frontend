@@ -1,0 +1,3 @@
+mutation Pages_Signout($input: SignoutInput!) {
+  signout(input: $input)
+}

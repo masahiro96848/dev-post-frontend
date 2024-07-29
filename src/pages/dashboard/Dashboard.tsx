@@ -14,7 +14,7 @@ export const Dashboard: FC<Props> = (props: Props) => {
   const { viewer } = props
   return (
     <PageRoot backgroundColor="gray.50">
-      <Header />
+      <Header viewer={viewer} />
       <Sidebar />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {viewer.email}
