@@ -1,12 +1,17 @@
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
-import Signup from './Signup'
+import { Signup } from './Signup'
 import { usePagesSignupMutation } from './index.gen'
+import { useSuccessToast } from '@/toastModal/useSuccessToast'
 
 const SignupPage: FC = () => {
+  const router = useRouter()
+  const { showToastSuccess } = useSuccessToast()
   const [signup] = usePagesSignupMutation({
-    onCompleted(data) {
-      console.log('Signup successful:', data)
+    onCompleted() {
+      showToastSuccess('ユーザー登録に成功しました。')
+      router.push('/dashboard')
     },
     onError: (error) => console.log('Something Error:', error.message),
   })

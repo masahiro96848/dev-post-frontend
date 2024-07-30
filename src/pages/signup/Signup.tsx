@@ -22,7 +22,7 @@ type FormValues = {
   passwordConfirmation: string
 }
 
-const Signup: FC<{ onSubmit: (values: FormValues) => void }> = ({
+export const Signup: FC<{ onSubmit: (values: FormValues) => void }> = ({
   onSubmit,
 }) => {
   const { register, handleSubmit, watch } = useForm<FormValues>({
@@ -121,5 +121,3 @@ const Signup: FC<{ onSubmit: (values: FormValues) => void }> = ({
     </PageRoot>
   )
 }
-
-export default Signup
