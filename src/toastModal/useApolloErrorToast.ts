@@ -10,6 +10,7 @@ export const useApolloErrorToast = () => {
 
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const firstError = e.graphQLErrors[0]
+        // detailed_codeが入っている場合は、バックエンドのエラーハンドリングで総れされたエラーなのでメッセージを表示する
         if (firstError.extensions?.['detailed_code']) {
           title = firstError.message
         }
