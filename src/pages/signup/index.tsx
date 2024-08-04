@@ -3,17 +3,20 @@ import React, { FC } from 'react'
 
 import { Signup } from './Signup'
 import { usePagesSignupMutation } from './index.gen'
+import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
 import { useSuccessToast } from '@/toastModal/useSuccessToast'
 
 const SignupPage: FC = () => {
   const router = useRouter()
   const { showToastSuccess } = useSuccessToast()
+  const apolloErrorToast = useApolloErrorToast()
+
   const [signup] = usePagesSignupMutation({
     onCompleted() {
       showToastSuccess('ユーザー登録に成功しました。')
       router.push('/dashboard')
     },
-    onError: (error) => console.log('Something Error:', error.message),
+    onError: apolloErrorToast,
   })
   return (
     <Signup
