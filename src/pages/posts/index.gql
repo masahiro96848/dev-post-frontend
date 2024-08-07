@@ -1,0 +1,11 @@
+query Pages_Posts_Viewer {
+  viewer {
+    ...Pages_Posts_User
+  }
+}
+
+fragment Pages_Posts_User on User {
+  id
+  name
+  email
+}
