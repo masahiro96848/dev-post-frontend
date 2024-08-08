@@ -56,7 +56,7 @@ export const Posts: FC<Props> = (props: Props) => {
               最新投稿一覧
             </Heading>
           </Box>
-          <Box px="12px" py="12px">
+          <Box py="12px">
             <Flex justifyContent="flex-end" alignItems="center">
               <Text mr="4">並び順</Text>
               <Menu>
@@ -81,7 +81,8 @@ export const Posts: FC<Props> = (props: Props) => {
               {postsData.map((post, index) => (
                 <Link key={index} textDecoration="none" mb={4}>
                   <Card
-                    width="100%"
+                    width="330px"
+                    maxWidth="100%"
                     border="1px solid"
                     borderColor="gray.200"
                     borderRadius="md"
