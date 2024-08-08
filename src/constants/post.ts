@@ -81,4 +81,11 @@ export const postsData = [
     description:
       'Learn how to handle asynchronous operations in JavaScript effectively.',
   },
+  {
+    image:
+      'https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
+    title: 'Understanding React Hooks',
+    description:
+      'An in-depth look at React Hooks, their usage, and best practices.',
+  },
 ]

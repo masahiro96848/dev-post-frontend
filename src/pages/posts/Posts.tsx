@@ -58,7 +58,6 @@ export const Posts: FC<Props> = (props: Props) => {
           </Box>
           <Box py="12px">
             <Flex justifyContent="flex-end" alignItems="center">
-              <Text mr="4">並び順</Text>
               <Menu>
                 <MenuButton
                   as={Button}
@@ -81,7 +80,7 @@ export const Posts: FC<Props> = (props: Props) => {
               {postsData.map((post, index) => (
                 <Link key={index} textDecoration="none" mb={4}>
                   <Card
-                    width="330px"
+                    width="320px"
                     maxWidth="100%"
                     border="1px solid"
                     borderColor="gray.200"
@@ -129,14 +128,28 @@ export const Posts: FC<Props> = (props: Props) => {
         </Box>
       ) : (
         <Box p={isTablet ? '24px' : '96px'}>
-          <Box px="24px" py="24px">
-            <Heading fontSize="2xl" textAlign="left">
+          <Box
+            width="100%"
+            maxWidth="1460px"
+            mx="auto"
+            px={{ base: '8px', md: '24px' }}
+            py="24px"
+          >
+            <Heading
+              px={{ base: '8px', md: '24px' }}
+              fontSize="2xl"
+              textAlign="left"
+            >
               最新投稿一覧
             </Heading>
           </Box>
-          <Box px={isTablet ? '12px' : '96px'} py="24px">
+          <Box
+            maxWidth="1400px"
+            mx="auto"
+            px={isTablet ? '12px' : '96px'}
+            py="24px"
+          >
             <Flex justifyContent="flex-end" alignItems="center">
-              <Text mr="4">並び順</Text>
               <Menu>
                 <MenuButton
                   as={Button}
@@ -154,62 +167,70 @@ export const Posts: FC<Props> = (props: Props) => {
               </Menu>
             </Flex>
           </Box>
-          <Box px="24px">
-            <Flex
-              wrap="wrap"
-              gap={isTablet ? '6' : '8'}
-              justifyContent="flex-start"
-            >
-              {postsData.map((post, index) => (
-                <Link key={index} textDecoration="none">
-                  <Card
-                    width={isTablet ? '340px' : '300px'}
-                    maxW={isTablet ? '500px' : '300px'}
-                    border="1px solid"
-                    borderColor="gray.200"
-                    borderRadius="md"
-                    height="400px"
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-between"
-                  >
-                    <CardBody
-                      p="0"
+          <Box
+            display="flex"
+            justifyContent="center"
+            px={{ base: '8px', md: '24px' }}
+          >
+            <Box width="100%" maxWidth="1400px" px={{ base: '8px' }}>
+              <Flex
+                wrap="wrap"
+                gap={{ base: '8px', md: '8px' }}
+                justifyContent="flex-start" // 常に左揃え
+              >
+                {postsData.map((post, index) => (
+                  <Link key={index} textDecoration="none">
+                    <Card
+                      width={{ base: '100%', md: '300px' }} // タブレットで300pxの固定幅
+                      maxW="100%"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      borderRadius="md"
+                      height="400px"
                       display="flex"
                       flexDirection="column"
                       justifyContent="space-between"
+                      mx={{ base: 0, md: '8px' }} // 両側に8pxの余白を設定
+                      mb={{ base: '8px', md: '8px' }} // 下側に8pxの余白を設定
                     >
-                      <Box>
-                        <Image
-                          src={post.image}
-                          alt={post.title}
-                          width="100%"
-                          height="200px"
-                          objectFit="cover"
-                          borderTopRadius="md"
-                        />
-                        <Stack mt="6" spacing="3" p="4">
-                          <Heading size="md">
-                            {post.title.length > 30
-                              ? `${post.title.slice(0, 30)}...`
-                              : post.title}
-                          </Heading>
-                          <Text color="gray.500">
-                            {post.description.length > 20
-                              ? `${post.description.slice(0, 20)}...`
-                              : post.description}
-                          </Text>
-                        </Stack>
-                      </Box>
-                      <Flex justify="flex-end" align="center" p="4">
-                        <Icon boxSize={8} as={FaStar} color="yellow.400" />
-                        <Text ml="2">4.5</Text>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                </Link>
-              ))}
-            </Flex>
+                      <CardBody
+                        p="0"
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="space-between"
+                      >
+                        <Box>
+                          <Image
+                            src={post.image}
+                            alt={post.title}
+                            width="100%"
+                            height="200px"
+                            objectFit="cover"
+                            borderTopRadius="md"
+                          />
+                          <Stack mt="6" spacing="3" p="4">
+                            <Heading size="md">
+                              {post.title.length > 30
+                                ? `${post.title.slice(0, 30)}...`
+                                : post.title}
+                            </Heading>
+                            <Text color="gray.500">
+                              {post.description.length > 20
+                                ? `${post.description.slice(0, 20)}...`
+                                : post.description}
+                            </Text>
+                          </Stack>
+                        </Box>
+                        <Flex justify="flex-end" align="center" p="4">
+                          <Icon boxSize={8} as={FaStar} color="yellow.400" />
+                          <Text ml="2">4.5</Text>
+                        </Flex>
+                      </CardBody>
+                    </Card>
+                  </Link>
+                ))}
+              </Flex>
+            </Box>
           </Box>
         </Box>
       )}
