@@ -27,8 +27,8 @@ export const Header: FC<Props> = (props: Props) => {
       borderBottomColor="gray.200"
     >
       <Box>
-        <Link href="/" color="white" fontSize="lg" mr={4}>
-          Customer Management
+        <Link href="/" color="white" fontSize="3xl" mr={4}>
+          Dev Post
         </Link>
       </Box>
       {viewer ? (
