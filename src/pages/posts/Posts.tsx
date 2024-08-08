@@ -35,15 +35,18 @@ export const Posts: FC<Props> = (props: Props) => {
   return (
     <PageRoot backgroundColor="gray.50">
       <Header viewer={viewer} />
-      <Box p="48px">
+      <Box p={{ base: '24px', md: '48px' }}>
         <Flex
-          px="96px"
-          py="48px"
-          justifyContent="space-between"
+          px={{ base: '24px', md: '96px' }}
+          py={{ base: '24px', md: '48px' }}
+          justifyContent={{ base: 'space-between', md: 'space-between' }}
           alignItems="center"
+          flexDirection={{ base: 'row', md: 'row' }}
         >
-          <Heading fontSize="2xl">最新投稿一覧</Heading>
-          <Flex alignItems="center">
+          <Heading fontSize="2xl" textAlign={{ base: 'left', md: 'left' }}>
+            最新投稿一覧
+          </Heading>
+          <Flex alignItems="center" mt={{ base: 0, md: 0 }}>
             <Text mr="4">並び順</Text>
             <Menu>
               <MenuButton
@@ -62,14 +65,21 @@ export const Posts: FC<Props> = (props: Props) => {
             </Menu>
           </Flex>
         </Flex>
-        <Box px="96px">
-          <Flex wrap="wrap" gap={8} justifyContent="flex-start">
+        <Box px={{ base: '24px', md: '96px' }}>
+          <Flex
+            wrap="wrap"
+            gap={8}
+            justifyContent={{ base: 'center', md: 'flex-start' }}
+          >
             {postsData.map((post, index) => (
-              <Link key={index} textDecoration="none">
+              <Link
+                key={index}
+                textDecoration="none"
+                width={{ base: '100%', md: 'auto' }}
+              >
                 <Card
-                  maxW="sm"
-                  width="100%"
-                  maxWidth="300px"
+                  width={{ base: '100%', md: '300px' }}
+                  maxW={{ base: '100%', md: '300px' }}
                   border="1px solid"
                   borderColor="gray.200"
                   borderRadius="md"
@@ -88,8 +98,8 @@ export const Posts: FC<Props> = (props: Props) => {
                       <Image
                         src={post.image}
                         alt={post.title}
-                        width={300}
-                        height={200}
+                        width="100%"
+                        height="200px"
                         objectFit="cover"
                         borderTopRadius="md"
                       />
