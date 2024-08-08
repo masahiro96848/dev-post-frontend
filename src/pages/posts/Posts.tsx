@@ -35,20 +35,14 @@ export const Posts: FC<Props> = (props: Props) => {
   return (
     <PageRoot backgroundColor="gray.50">
       <Header viewer={viewer} />
-      <Box p={{ base: '24px', md: '48px' }}>
-        <Box
-          px={{ base: '24px', md: '96px' }}
-          py={{ base: '24px', md: '48px' }}
-        >
+      <Box p="96px">
+        <Box px="24px" py="24px">
           <Heading fontSize="2xl" textAlign="left">
             最新投稿一覧
           </Heading>
         </Box>
 
-        <Box
-          px={{ base: '24px', md: '96px' }}
-          py={{ base: '24px', md: '48px' }}
-        >
+        <Box px="96px" py="24px">
           <Flex justifyContent="flex-end" alignItems="center">
             <Text mr="4">並び順</Text>
             <Menu>
@@ -68,21 +62,13 @@ export const Posts: FC<Props> = (props: Props) => {
             </Menu>
           </Flex>
         </Box>
-        <Box px={{ base: '24px', md: '96px' }}>
-          <Flex
-            wrap="wrap"
-            gap={8}
-            justifyContent={{ base: 'center', md: 'flex-start' }}
-          >
+        <Box px="24px">
+          <Flex wrap="wrap" gap={8} justifyContent="flex-start">
             {postsData.map((post, index) => (
-              <Link
-                key={index}
-                textDecoration="none"
-                width={{ base: '100%', md: 'auto' }}
-              >
+              <Link key={index} textDecoration="none">
                 <Card
-                  width={{ base: '100%', md: '300px' }}
-                  maxW={{ base: '100%', md: '300px' }}
+                  width="100%"
+                  maxW="300px"
                   border="1px solid"
                   borderColor="gray.200"
                   borderRadius="md"
