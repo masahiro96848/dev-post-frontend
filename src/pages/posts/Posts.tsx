@@ -36,17 +36,20 @@ export const Posts: FC<Props> = (props: Props) => {
     <PageRoot backgroundColor="gray.50">
       <Header viewer={viewer} />
       <Box p={{ base: '24px', md: '48px' }}>
-        <Flex
+        <Box
           px={{ base: '24px', md: '96px' }}
           py={{ base: '24px', md: '48px' }}
-          justifyContent={{ base: 'space-between', md: 'space-between' }}
-          alignItems="center"
-          flexDirection={{ base: 'row', md: 'row' }}
         >
-          <Heading fontSize="2xl" textAlign={{ base: 'left', md: 'left' }}>
+          <Heading fontSize="2xl" textAlign="left">
             最新投稿一覧
           </Heading>
-          <Flex alignItems="center" mt={{ base: 0, md: 0 }}>
+        </Box>
+
+        <Box
+          px={{ base: '24px', md: '96px' }}
+          py={{ base: '24px', md: '48px' }}
+        >
+          <Flex justifyContent="flex-end" alignItems="center">
             <Text mr="4">並び順</Text>
             <Menu>
               <MenuButton
@@ -64,7 +67,7 @@ export const Posts: FC<Props> = (props: Props) => {
               </MenuList>
             </Menu>
           </Flex>
-        </Flex>
+        </Box>
         <Box px={{ base: '24px', md: '96px' }}>
           <Flex
             wrap="wrap"
