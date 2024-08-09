@@ -35,3 +35,15 @@ export const signupSchema = z
       })
     }
   })
+
+export const postsSchema = z.object({
+  title: z
+    .string()
+    .min(1, { message: '必須項目です' })
+    .max(50, { message: 'タイトルは50文字以内で入力してください' }),
+  description: z
+    .string()
+    .max(50, { message: '説明は50文字以内で入力してください' })
+    .optional(),
+  body: z.string().optional(),
+})
