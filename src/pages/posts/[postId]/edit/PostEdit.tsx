@@ -68,7 +68,7 @@ export const PostEdit: FC = () => {
   return (
     <PageRoot backgroundColor="gray.50">
       <Header />
-      <Box>
+      <Box p={12}>
         <Container
           maxWidth="1200px"
           bg="white"
