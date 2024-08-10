@@ -8,7 +8,6 @@ import {
   Flex,
   Button,
   Icon,
-  VStack,
   Card,
   CardBody,
   Link,
@@ -17,13 +16,19 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
 } from '@chakra-ui/react'
 import React, { FC, useEffect, useState } from 'react'
-import { FaLock, FaStar, FaUser } from 'react-icons/fa'
+import { FaStar } from 'react-icons/fa'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
+import { Sidebar } from '@/components/navigation/Sidebar'
 import { postsData } from '@/constants/post'
 
 export const Dashboard: FC = () => {
@@ -42,103 +47,121 @@ export const Dashboard: FC = () => {
   return (
     <PageRoot backgroundColor="gray.50">
       <Header />
-      <Box p={4}>
+      <Box>
         {isMobile ? (
-          <Flex justifyContent="center" mt="48px">
-            <Container maxWidth="1400px" bg="white" boxShadow="md" p={12}>
-              <Flex>
-                <VStack width="20%" spacing={4} align="stretch">
-                  <Button
-                    justifyContent="flex-start"
-                    leftIcon={<Icon as={FaLock} />}
-                    borderRadius="none"
-                    _hover={{ bg: 'gray.100' }}
-                  >
-                    投稿記事一覧
-                  </Button>
-                  <Button
-                    justifyContent="flex-start"
-                    leftIcon={<Icon as={FaUser} />}
-                    borderRadius="none"
-                    _hover={{ bg: 'gray.100' }}
-                  >
-                    プロフィール変更
-                  </Button>
-                </VStack>
+          <Box p="24px">
+            <Tabs>
+              <TabList>
+                <Tab>投稿記事一覧</Tab>
+                <Tab>プロフィール変更</Tab>
+              </TabList>
 
-                <Box width="80%" p={4}>
-                  <Box>
-                    <Heading as="h2" fontSize="xl" mb={4}>
+              <TabPanels>
+                <TabPanel>
+                  <Box py="24px">
+                    <Heading fontSize="2xl" textAlign="left">
                       投稿記事一覧
                     </Heading>
-                    <Flex wrap="wrap" justifyContent="space-between">
-                      {[...Array(8)].map((_, i) => (
-                        <Box
-                          key={i}
-                          bg="white"
-                          width="30%"
-                          mb={6}
-                          p={4}
-                          boxShadow="sm"
-                          borderWidth="1px"
-                          borderRadius="md"
+                  </Box>
+                  <Box py="12px">
+                    <Flex justifyContent="flex-end" alignItems="center">
+                      <Menu>
+                        <MenuButton
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                          backgroundColor="gray.500"
+                          color="white"
+                          _hover={{ backgroundColor: 'blue.600' }}
                         >
-                          <Box height="150px" bg="gray.100" mb={4} />
-                          <Text fontSize="sm" color="gray.600" mb={2}>
-                            2024-04-02
-                          </Text>
-                          <Heading as="h3" fontSize="md" mb={2}>
-                            サンプルテキストサンプルテキスト
-                          </Heading>
-                          <Text fontSize="sm" color="gray.600">
-                            公開中
-                          </Text>
-                        </Box>
-                      ))}
-                    </Flex>
-                    {/* Pagination */}
-                    <Flex justifyContent="center" mt={6}>
-                      <Button size="sm" mr={2}>
-                        1
-                      </Button>
-                      <Button size="sm" mr={2}>
-                        2
-                      </Button>
-                      <Button size="sm" mr={2}>
-                        ...
-                      </Button>
-                      <Button size="sm" mr={2}>
-                        9
-                      </Button>
-                      <Button size="sm">10</Button>
+                          すべて
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem>すべて</MenuItem>
+                          <MenuItem>公開済み</MenuItem>
+                          <MenuItem>保存中</MenuItem>
+                        </MenuList>
+                      </Menu>
                     </Flex>
                   </Box>
-                </Box>
-              </Flex>
-            </Container>
-          </Flex>
+                  <Box>
+                    <Flex wrap="wrap" justifyContent="center">
+                      {postsData.map((post, index) => (
+                        <Link key={index} textDecoration="none" mb={4}>
+                          <Card
+                            width="320px"
+                            maxWidth="100%"
+                            border="1px solid"
+                            borderColor="gray.200"
+                            borderRadius="md"
+                            height="80px"
+                            display="flex"
+                            alignItems="center"
+                          >
+                            <CardBody p="0" display="flex" alignItems="center">
+                              <Image
+                                src={post.image}
+                                alt={post.title}
+                                width="80px"
+                                height="80px"
+                                borderRadius="md"
+                              />
+                              <Stack
+                                spacing="3"
+                                pl="4"
+                                pr="4"
+                                height="100%"
+                                justifyContent="center"
+                              >
+                                <Heading size="sm" noOfLines={1}>
+                                  {post.title.length > 30
+                                    ? `${post.title.slice(0, 30)}...`
+                                    : post.title}
+                                </Heading>
+                                <Text
+                                  fontSize="sm"
+                                  color="blue.500"
+                                  border="1px solid"
+                                  borderColor="blue.500"
+                                  px="2"
+                                  py="1"
+                                  borderRadius="md"
+                                  width="fit-content"
+                                  display="inline-block"
+                                >
+                                  {post.isPublished}
+                                </Text>
+                              </Stack>
+                              <Flex
+                                justify="flex-end"
+                                align="center"
+                                ml="auto"
+                                pr="4"
+                              >
+                                <Icon
+                                  boxSize={4}
+                                  as={FaStar}
+                                  color="yellow.400"
+                                />
+                                <Text ml="2">4.5</Text>
+                              </Flex>
+                            </CardBody>
+                          </Card>
+                        </Link>
+                      ))}
+                    </Flex>
+                  </Box>
+                </TabPanel>
+                <TabPanel>
+                  <p>two!</p>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
         ) : (
           <Flex justifyContent="center" mt="48px">
             <Container maxWidth="1400px" bg="white" boxShadow="md" p={12}>
               <Flex>
-                <VStack width="20%" spacing={4} align="stretch" mt={12}>
-                  <Button
-                    justifyContent="flex-start"
-                    leftIcon={<Icon as={FaLock} />}
-                    borderRadius="none"
-                    _hover={{ bg: 'gray.100' }}
-                  >
-                    投稿記事一覧
-                  </Button>
-                  <Button
-                    justifyContent="flex-start"
-                    leftIcon={<Icon as={FaUser} />}
-                    borderRadius="none"
-                    _hover={{ bg: 'gray.100' }}
-                  >
-                    プロフィール変更
-                  </Button>
-                </VStack>
+                <Sidebar />
 
                 <Box p="24px">
                   <Box
