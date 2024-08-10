@@ -47,3 +47,14 @@ export const postsSchema = z.object({
     .optional(),
   body: z.string().optional(),
 })
+
+export const profileSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: '必須項目です' })
+    .max(20, { message: 'ユーザー名は20文字以内で入力してください' }),
+  bio: z
+    .string()
+    .max(100, { message: '自己紹介文は100文字以内で入力してください' })
+    .optional(),
+})
