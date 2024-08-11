@@ -1,13 +1,26 @@
 type User {
   id: ID
-  email: String!
+  email: String
   name: String
   created_at: String
   updated_at: String
 }
 
+type Post {
+  id: ID!
+  title: String!
+  body: String
+  imageUrl: String
+  isPublished: Boolean!
+  uid: String!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
 type Query {
   viewer: User!
+  posts: Post!
 }
 
 input SigninInput {
