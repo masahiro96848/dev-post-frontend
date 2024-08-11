@@ -1,11 +1,26 @@
-query Pages_Posts_Viewer {
+query Pages_Posts_Index {
   viewer {
     ...Pages_Posts_User
+  }
+  posts {
+    ...Pages_Posts_Post
   }
 }
 
 fragment Pages_Posts_User on User {
-  id
   name
   email
+}
+
+fragment Pages_Posts_Post on Post {
+  title
+  body
+  imageUrl
+  isPublished
+  uid
+  user {
+    name
+  }
+  createdAt
+  updatedAt
 }

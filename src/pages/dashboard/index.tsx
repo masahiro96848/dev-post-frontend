@@ -19,7 +19,7 @@ const Page: NextPage = () => {
   if (!data?.viewer) {
     return <Loading />
   }
-  return <Dashboard viewer={data.viewer} />
+  return <Dashboard />
 }
 
 export default Page

@@ -1,28 +1,24 @@
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { Posts } from './Posts'
-import { usePagesPostsViewerQuery } from './index.gen'
+import { usePagesPostsIndexQuery } from './index.gen'
 import { Loading } from '@/toastModal/Loading'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
 
 const PostsPage: NextPage = () => {
-  const router = useRouter()
-
   const apolloErrorToast = useApolloErrorToast()
-  const { data } = usePagesPostsViewerQuery({
+  const { data } = usePagesPostsIndexQuery({
     fetchPolicy: 'cache-and-network',
     onError(e) {
       apolloErrorToast(e)
-      router.push('/signin')
     },
   })
 
-  if (!data?.viewer) {
+  if (!data) {
     return <Loading />
   }
 
-  return <Posts viewer={data.viewer} />
+  return <Posts viewer={data.viewer} posts={data.posts} />
 }
 
 export default PostsPage

@@ -22,15 +22,15 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
-import { postsData } from '@/constants/post'
-import { User } from '@/types/graphql.gen'
+import { Post, User } from '@/types/graphql.gen'
 
 type Props = {
-  viewer: User
+  viewer?: User | null
+  posts: Post[]
 }
 
 export const Posts: FC<Props> = (props: Props) => {
-  const { viewer } = props
+  const { viewer, posts } = props
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
 
@@ -48,7 +48,7 @@ export const Posts: FC<Props> = (props: Props) => {
 
   return (
     <PageRoot backgroundColor="gray.50">
-      <Header viewer={viewer} />
+      <Header viewer={viewer ?? undefined} />
       {isMobile ? (
         <Box p="24px">
           <Box px="24px" py="24px">
@@ -77,7 +77,7 @@ export const Posts: FC<Props> = (props: Props) => {
           </Box>
           <Box>
             <Flex wrap="wrap" justifyContent="center">
-              {postsData.map((post, index) => (
+              {posts.map((post, index) => (
                 <Link key={index} textDecoration="none" mb={4}>
                   <Card
                     width="320px"
@@ -91,7 +91,7 @@ export const Posts: FC<Props> = (props: Props) => {
                   >
                     <CardBody p="0" display="flex" alignItems="center">
                       <Image
-                        src={post.image}
+                        src={post.imageUrl ?? undefined}
                         alt={post.title}
                         width="80px"
                         height="80px"
@@ -110,9 +110,9 @@ export const Posts: FC<Props> = (props: Props) => {
                             : post.title}
                         </Heading>
                         <Text color="gray.500" noOfLines={1}>
-                          {post.description.length > 20
-                            ? `${post.description.slice(0, 20)}...`
-                            : post.description}
+                          {post.body && post.body.length > 20
+                            ? `${post.body.slice(0, 20)}...`
+                            : post.body || ''}
                         </Text>
                       </Stack>
                       <Flex justify="flex-end" align="center" ml="auto" pr="4">
@@ -178,7 +178,7 @@ export const Posts: FC<Props> = (props: Props) => {
                 gap={{ base: '8px', md: '8px' }}
                 justifyContent="flex-start" // 常に左揃え
               >
-                {postsData.map((post, index) => (
+                {posts.map((post, index) => (
                   <Link key={index} textDecoration="none">
                     <Card
                       width={{ base: '100%', md: '300px' }} // タブレットで300pxの固定幅
@@ -201,7 +201,7 @@ export const Posts: FC<Props> = (props: Props) => {
                       >
                         <Box>
                           <Image
-                            src={post.image}
+                            src={post.imageUrl ?? undefined}
                             alt={post.title}
                             width="100%"
                             height="200px"
@@ -215,9 +215,9 @@ export const Posts: FC<Props> = (props: Props) => {
                                 : post.title}
                             </Heading>
                             <Text color="gray.500">
-                              {post.description.length > 20
-                                ? `${post.description.slice(0, 20)}...`
-                                : post.description}
+                              {post.body && post.body.length > 20
+                                ? `${post.body.slice(0, 20)}...`
+                                : post.body || ''}
                             </Text>
                           </Stack>
                         </Box>
