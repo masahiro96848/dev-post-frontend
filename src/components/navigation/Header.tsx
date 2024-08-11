@@ -34,6 +34,9 @@ export const Header: FC<Props> = (props: Props) => {
       {viewer ? (
         <Box>
           <Flex alignItems="center">
+            <Link href="/posts" color="white" fontSize="lg" mr={4}>
+              記事一覧
+            </Link>
             <Text color="white" fontSize="lg" mr={4}>
               {viewer.name}
             </Text>
@@ -48,6 +51,9 @@ export const Header: FC<Props> = (props: Props) => {
         </Box>
       ) : (
         <Box>
+          <Link href="/posts" color="white" fontSize="lg" mr={4}>
+            記事一覧
+          </Link>
           <Link href="/signin" color="white" fontSize="lg" mr={4}>
             ログイン
           </Link>

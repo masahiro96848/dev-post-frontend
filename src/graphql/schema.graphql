@@ -7,20 +7,20 @@ type User {
 }
 
 type Post {
-  id: ID!
+  id: ID
   title: String!
   body: String
   imageUrl: String
   isPublished: Boolean!
   uid: String!
   user: User!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: String
+  updatedAt: String
 }
 
 type Query {
   viewer: User!
-  posts: Post!
+  posts: [Post!]!
 }
 
 input SigninInput {
