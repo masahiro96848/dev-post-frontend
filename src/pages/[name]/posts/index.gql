@@ -1,0 +1,16 @@
+query Pages_Post_Detail_Index($uid: String!, $name: String!) {
+  postDetail(uid: $uid, name: $name) {
+    ...Pages_Post_Detail
+  }
+}
+fragment Pages_Post_Detail on Post {
+  title
+  body
+  imageUrl
+  isPublished
+  uid
+  user {
+    name
+  }
+  createdAt
+}

@@ -78,7 +78,12 @@ export const Posts: FC<Props> = (props: Props) => {
           <Box>
             <Flex wrap="wrap" justifyContent="center">
               {posts.map((post, index) => (
-                <Link key={index} textDecoration="none" mb={4}>
+                <Link
+                  href={`${post.user.name}/posts/${post.uid}`}
+                  key={index}
+                  textDecoration="none"
+                  mb={4}
+                >
                   <Card
                     width="320px"
                     maxWidth="100%"
@@ -179,7 +184,11 @@ export const Posts: FC<Props> = (props: Props) => {
                 justifyContent="flex-start" // 常に左揃え
               >
                 {posts.map((post, index) => (
-                  <Link key={index} textDecoration="none">
+                  <Link
+                    href={`${post.user.name}/posts/${post.uid}`}
+                    key={index}
+                    textDecoration="none"
+                  >
                     <Card
                       width={{ base: '100%', md: '300px' }} // タブレットで300pxの固定幅
                       maxW="100%"
