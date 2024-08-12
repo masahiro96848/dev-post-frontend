@@ -25,7 +25,6 @@ import { zodResolver } from '@/utils/zodResolver'
 
 type FormValues = {
   title: string
-  description: string
   body: string
 }
 
@@ -42,7 +41,6 @@ export const PostEdit: FC = () => {
     resolver: zodResolver(postsSchema),
     defaultValues: {
       title: '',
-      description: '',
       body: '',
     },
   })
@@ -104,23 +102,6 @@ export const PostEdit: FC = () => {
                   />
                   <FormErrorMessage>
                     {errors.title && errors.title.message}
-                  </FormErrorMessage>
-                </FormControl>
-
-                <FormControl id="description" mt="6">
-                  <FormLabel fontSize="sm" fontWeight="600" color="gray.800">
-                    記事概要
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    size="lg"
-                    placeholder="概要を入力"
-                    px={4}
-                    py={8}
-                    {...register('description')}
-                  />
-                  <FormErrorMessage>
-                    {errors.description && errors.description.message}
                   </FormErrorMessage>
                 </FormControl>
               </Stack>
@@ -254,25 +235,7 @@ export const PostEdit: FC = () => {
                       {errors.title && errors.title.message}
                     </FormErrorMessage>
                   </FormControl>
-
-                  <FormControl id="description" mt="6">
-                    <FormLabel fontWeight="600" color="gray.800">
-                      記事概要
-                    </FormLabel>
-                    <Input
-                      type="text"
-                      size="lg"
-                      placeholder="概要を入力"
-                      px={4}
-                      py={8}
-                      {...register('description')}
-                    />
-                    <FormErrorMessage>
-                      {errors.description && errors.description.message}
-                    </FormErrorMessage>
-                  </FormControl>
                 </Stack>
-
                 <Box ml={8} flexShrink={0}>
                   <FormControl>
                     <FormLabel fontWeight="600" color="gray.800">
