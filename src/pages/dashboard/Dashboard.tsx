@@ -29,9 +29,16 @@ import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { Sidebar } from '@/components/navigation/Sidebar'
-import { postsData } from '@/constants/post'
+import { postStatus, PostStatusKey } from '@/constants/post'
+import { Post, User } from '@/types/graphql.gen'
+import { formatDate } from '@/utils/date'
 
-export const Dashboard: FC = () => {
+type Props = {
+  viewer: User
+  myPosts: Post[]
+}
+export const Dashboard: FC<Props> = (props: Props) => {
+  const { viewer, myPosts } = props
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -46,7 +53,7 @@ export const Dashboard: FC = () => {
 
   return (
     <PageRoot backgroundColor="gray.50">
-      <Header />
+      <Header viewer={viewer} />
       <Box>
         {isMobile ? (
           <Box p="24px">
@@ -85,7 +92,7 @@ export const Dashboard: FC = () => {
                   </Box>
                   <Box>
                     <Flex wrap="wrap" justifyContent="center">
-                      {postsData.map((post, index) => (
+                      {myPosts.map((post, index) => (
                         <Link key={index} textDecoration="none" mb={4}>
                           <Card
                             width="320px"
@@ -99,7 +106,7 @@ export const Dashboard: FC = () => {
                           >
                             <CardBody p="0" display="flex" alignItems="center">
                               <Image
-                                src={post.image}
+                                src={post.imageUrl ?? undefined}
                                 alt={post.title}
                                 width="80px"
                                 height="80px"
@@ -119,16 +126,28 @@ export const Dashboard: FC = () => {
                                 </Heading>
                                 <Text
                                   fontSize="sm"
-                                  color="blue.500"
+                                  color={
+                                    post.isPublished === 1
+                                      ? 'blue.500'
+                                      : 'gray.500'
+                                  }
                                   border="1px solid"
-                                  borderColor="blue.500"
+                                  borderColor={
+                                    post.isPublished === 1
+                                      ? 'blue.500'
+                                      : 'gray.500'
+                                  }
                                   px="2"
                                   py="1"
                                   borderRadius="md"
                                   width="fit-content"
                                   display="inline-block"
                                 >
-                                  {post.isPublished}
+                                  {
+                                    postStatus[
+                                      post.isPublished as PostStatusKey
+                                    ]
+                                  }
                                 </Text>
                               </Stack>
                               <Flex
@@ -210,7 +229,7 @@ export const Dashboard: FC = () => {
                         gap={{ base: '8px', md: '8px' }}
                         justifyContent="flex-start"
                       >
-                        {postsData.map((post, index) => (
+                        {myPosts.map((post, index) => (
                           <Link key={index} textDecoration="none">
                             <Card
                               width={{ base: '100%', md: '300px' }}
@@ -233,7 +252,7 @@ export const Dashboard: FC = () => {
                               >
                                 <Box>
                                   <Image
-                                    src={post.image}
+                                    src={post.imageUrl ?? undefined}
                                     alt={post.title}
                                     width="100%"
                                     height="200px"
@@ -243,16 +262,29 @@ export const Dashboard: FC = () => {
                                   <Stack mt="2" spacing="3" p="4">
                                     <Text
                                       fontSize="sm"
-                                      color="blue.500"
+                                      color={
+                                        post.isPublished === 1
+                                          ? 'blue.500'
+                                          : 'gray.500'
+                                      }
                                       border="1px solid"
-                                      borderColor="blue.500"
+                                      borderColor={
+                                        post.isPublished === 1
+                                          ? 'blue.500'
+                                          : 'gray.500'
+                                      }
                                       px="2"
                                       py="1"
                                       borderRadius="md"
                                       width="fit-content"
                                       display="inline-block"
                                     >
-                                      {post.isPublished}
+                                      {
+                                        postStatus[
+                                          (post.isPublished ??
+                                            0) as PostStatusKey
+                                        ]
+                                      }
                                     </Text>
                                     <Heading size="md">
                                       {post.title.length > 30
@@ -269,7 +301,7 @@ export const Dashboard: FC = () => {
                                   mt="auto"
                                 >
                                   <Text fontSize="sm" color="gray.600">
-                                    {post.createdAt}
+                                    {formatDate(post.createdAt)}
                                   </Text>
                                   <Flex justify="flex-end" align="center">
                                     <Icon

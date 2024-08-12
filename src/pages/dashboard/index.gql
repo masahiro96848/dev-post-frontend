@@ -1,6 +1,9 @@
-query Pages_Dashboard_Viewer {
+query Pages_Dashboard_Index {
   viewer {
     ...Pages_Dashboard_User
+  }
+  myPosts {
+    ...Pages_Dashboard_Post
   }
 }
 
@@ -8,4 +11,16 @@ fragment Pages_Dashboard_User on User {
   id
   email
   name
+}
+
+fragment Pages_Dashboard_Post on Post {
+  title
+  body
+  imageUrl
+  isPublished
+  uid
+  user {
+    name
+  }
+  createdAt
 }
