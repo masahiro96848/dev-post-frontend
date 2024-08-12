@@ -23,6 +23,7 @@ type Post {
 type Query {
   viewer: User!
   posts: [Post!]!
+  postDetail(uid: String!, name: String!): Post! 
   myPosts: [Post!]!
 }
 

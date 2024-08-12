@@ -13,8 +13,14 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
+import { Post } from '@/types/graphql.gen'
+import { formatDate } from '@/utils/date'
 
-export const Detail: FC = () => {
+type Props = {
+  post: Post
+}
+export const Detail: FC<Props> = (props: Props) => {
+  const { post } = props
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -42,7 +48,7 @@ export const Detail: FC = () => {
           >
             <Box>
               <Image
-                src="https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+                src={post.imageUrl ?? undefined}
                 alt="Article Image"
                 w="100%"
                 h="auto"
@@ -51,7 +57,7 @@ export const Detail: FC = () => {
             </Box>
             <Flex justifyContent="space-between" alignItems="center" mt={6}>
               <Text fontSize="sm" color="gray.600">
-                2024-04-02
+                {formatDate(post.createdAt)}
               </Text>
               <Flex alignItems="center">
                 <Box>
@@ -63,13 +69,10 @@ export const Detail: FC = () => {
               </Flex>
             </Flex>
             <Heading as="h2" fontSize="lg" mt={4}>
-              サンプルテキストサンプルテキスト
+              {post.title}
             </Heading>
             <Text mt={4} lineHeight="tall">
-              ここに内容が入る <br />
-              ここに内容が入る <br />
-              ここに内容が入る <br />
-              ここに内容が入る
+              {post.body}
             </Text>
           </Container>
         ) : (
@@ -84,7 +87,7 @@ export const Detail: FC = () => {
           >
             <Box>
               <Image
-                src="https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+                src={post.imageUrl ?? undefined}
                 alt="Article Image"
                 w="100%"
                 h="auto"
@@ -93,7 +96,7 @@ export const Detail: FC = () => {
             </Box>
             <Flex justifyContent="space-between" alignItems="center" mt={6}>
               <Text fontSize="sm" color="gray.600">
-                2024-04-02
+                {formatDate(post.createdAt)}
               </Text>
               <Flex alignItems="center">
                 <Box>
@@ -105,13 +108,10 @@ export const Detail: FC = () => {
               </Flex>
             </Flex>
             <Heading as="h2" size="lg" mt={4}>
-              サンプルテキストサンプルテキスト
+              {post.title}
             </Heading>
             <Text mt={4} lineHeight="tall">
-              ここに内容が入る <br />
-              ここに内容が入る <br />
-              ここに内容が入る <br />
-              ここに内容が入る
+              {post.body}
             </Text>
           </Container>
         )}
