@@ -115,3 +115,11 @@ export const postsData = [
     createdAt: '2024-04-04',
   },
 ]
+
+export const postStatus = {
+  0: '',
+  1: '公開済み',
+  2: '保存中',
+} as const
+
+export type PostStatusKey = keyof typeof postStatus

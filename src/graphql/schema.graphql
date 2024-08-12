@@ -1,9 +1,11 @@
+scalar Date
+
 type User {
   id: ID
   email: String
   name: String
-  created_at: String
-  updated_at: String
+  created_at: Date
+  updated_at: Date
 }
 
 type Post {
@@ -11,16 +13,17 @@ type Post {
   title: String!
   body: String
   imageUrl: String
-  isPublished: Boolean!
+  isPublished: Int
   uid: String!
   user: User!
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
 }
 
 type Query {
   viewer: User!
   posts: [Post!]!
+  myPosts: [Post!]!
 }
 
 input SigninInput {
