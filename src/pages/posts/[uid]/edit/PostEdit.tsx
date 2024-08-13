@@ -21,6 +21,7 @@ import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { postsSchema } from '@/schemas/validationSchema'
+import { User } from '@/types/graphql.gen'
 import { zodResolver } from '@/utils/zodResolver'
 
 type FormValues = {
@@ -30,15 +31,18 @@ type FormValues = {
   isPublished: number
 }
 
-export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
-  onSubmit,
-}) => {
+export const PostEdit: FC<{
+  viewer: User
+  onSubmit: (values: FormValues) => void
+}> = ({ viewer, onSubmit }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [isPublished, setIsPublished] = useState<number>(1)
+
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: 'onChange',
@@ -56,7 +60,9 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        setImageSrc(reader.result as string)
+        const imageUrl = reader.result as string
+        setImageSrc(imageUrl)
+        setValue('imageUrl', imageUrl)
       }
       reader.readAsDataURL(file)
     }
@@ -66,10 +72,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
     document.getElementById('image-upload')?.click()
   }
 
-  const handleToggleChange = () => {
-    const newValue = isPublished === 1 ? 2 : 1
-    setIsPublished(newValue)
-  }
+  const isPublished = watch('isPublished', 1)
 
   useEffect(() => {
     const handleResize = () => {
@@ -83,7 +86,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
 
   return (
     <PageRoot backgroundColor="gray.50">
-      <Header />
+      <Header viewer={viewer} />
       <Box p={4}>
         {isMobile ? (
           <Container
@@ -158,7 +161,9 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                       id="image-upload"
                       type="file"
                       accept="image/*"
-                      onChange={handleImageChange}
+                      {...register('imageUrl', {
+                        onChange: handleImageChange,
+                      })}
                       display="none"
                     />
                   </Flex>
@@ -187,7 +192,11 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                     ml={4}
                     size="lg"
                     isChecked={isPublished === 2}
-                    onChange={handleToggleChange}
+                    {...register('isPublished', {
+                      onChange: (e) => {
+                        setValue('isPublished', e.target.checked ? 2 : 1)
+                      },
+                    })}
                   />
                 </FormControl>
               </Flex>
@@ -299,13 +308,16 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                         id="image-upload"
                         type="file"
                         accept="image/*"
-                        onChange={handleImageChange}
+                        {...register('imageUrl', {
+                          onChange: handleImageChange,
+                        })}
                         display="none"
                       />
                     </Flex>
                   </FormControl>
                 </Box>
               </Flex>
+
               <Flex align="center" justify="space-between" mt={6}>
                 <FormControl display="flex" alignItems="center">
                   <FormLabel fontWeight="600" color="gray.800" mb="0">
@@ -316,7 +328,11 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                     ml={4}
                     size="lg"
                     isChecked={isPublished === 2}
-                    onChange={handleToggleChange}
+                    {...register('isPublished', {
+                      onChange: (e) => {
+                        setValue('isPublished', e.target.checked ? 2 : 1)
+                      },
+                    })}
                   />
                 </FormControl>
               </Flex>

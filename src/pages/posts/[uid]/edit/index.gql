@@ -1,3 +1,9 @@
+query Pages_Post_Edit_Index {
+  viewer {
+    name
+  }
+}
+
 mutation Pages_Post_Edit($input: PostEditInput!) {
   postEdit(input: $input) {
     post {
