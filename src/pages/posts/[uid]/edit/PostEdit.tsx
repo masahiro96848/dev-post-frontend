@@ -35,7 +35,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
 }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [isPublished, setIsPublished] = useState(false)
+  const [isPublished, setIsPublished] = useState<number>(1)
   const {
     register,
     handleSubmit,
@@ -47,7 +47,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
       title: '',
       body: '',
       imageUrl: '',
-      isPublished: 0,
+      isPublished: 1,
     },
   })
 
@@ -67,7 +67,8 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
   }
 
   const handleToggleChange = () => {
-    setIsPublished((prev) => !prev)
+    const newValue = isPublished === 1 ? 2 : 1
+    setIsPublished(newValue)
   }
 
   useEffect(() => {
@@ -185,7 +186,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                     id="publish-status"
                     ml={4}
                     size="lg"
-                    isChecked={isPublished}
+                    isChecked={isPublished === 2}
                     onChange={handleToggleChange}
                   />
                 </FormControl>
@@ -193,8 +194,8 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isPublished ? 'black' : 'gray.300'}
-                  color={isPublished ? 'white' : 'black'}
+                  bg={isPublished === 1 ? 'gray.300' : 'black'}
+                  color={isPublished === 1 ? 'black' : 'white'}
                   width="100%"
                   mx="auto"
                   size="lg"
@@ -203,11 +204,11 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                   px={4}
                   py={8}
                   _hover={{
-                    bg: isPublished ? 'black' : 'gray.400',
+                    bg: isPublished === 1 ? 'gray.400' : 'black',
                   }}
                   isDisabled={!isValid}
                 >
-                  {isPublished ? '記事を公開する' : '下書きを保存する'}
+                  {isPublished === 1 ? '下書きを保存する' : '記事を公開する'}
                 </Button>
               </Stack>
             </form>
@@ -222,7 +223,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
             border="3px solid white"
             borderColor="#850b0bf"
           >
-            <form onSubmit={handleSubmit((v) => v)}>
+            <form onSubmit={handleSubmit((v) => onSubmit(v))}>
               <Flex>
                 <Stack spacing={4} flex="1">
                   <FormControl id="title" isInvalid={!!errors.title}>
@@ -242,7 +243,6 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                     </FormErrorMessage>
                   </FormControl>
 
-                  {/* 追加: 本文の入力欄をここに移動 */}
                   <FormControl id="body" mt="6">
                     <FormLabel fontWeight="600" color="gray.800">
                       本文
@@ -255,6 +255,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                     />
                   </FormControl>
                 </Stack>
+
                 <Box ml={8} flexShrink={0}>
                   <FormControl>
                     <FormLabel fontWeight="600" color="gray.800">
@@ -305,19 +306,6 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                   </FormControl>
                 </Box>
               </Flex>
-
-              <FormControl id="body" mt="6">
-                <FormLabel fontWeight="600" color="gray.800">
-                  本文
-                </FormLabel>
-                <Textarea
-                  size="lg"
-                  placeholder="技術内容を入力"
-                  height={600}
-                  {...register('body')}
-                />
-              </FormControl>
-
               <Flex align="center" justify="space-between" mt={6}>
                 <FormControl display="flex" alignItems="center">
                   <FormLabel fontWeight="600" color="gray.800" mb="0">
@@ -327,7 +315,7 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                     id="publish-status"
                     ml={4}
                     size="lg"
-                    isChecked={isPublished}
+                    isChecked={isPublished === 2}
                     onChange={handleToggleChange}
                   />
                 </FormControl>
@@ -335,8 +323,8 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isPublished ? 'black' : 'gray.300'}
-                  color={isPublished ? 'white' : 'black'}
+                  bg={isPublished === 1 ? 'gray.300' : 'black'}
+                  color={isPublished === 1 ? 'black' : 'white'}
                   width="50%"
                   mx="auto"
                   size="lg"
@@ -345,11 +333,11 @@ export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
                   px={4}
                   py={8}
                   _hover={{
-                    bg: isPublished ? 'black' : 'gray.400',
+                    bg: isPublished === 1 ? 'gray.400' : 'black',
                   }}
                   isDisabled={!isValid}
                 >
-                  {isPublished ? '記事を公開する' : '下書きを保存する'}
+                  {isPublished === 1 ? '下書きを保存する' : '記事を公開する'}
                 </Button>
               </Stack>
             </form>

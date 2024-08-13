@@ -47,6 +47,7 @@ input PostEditInput {
   body: String
   imageUrl: String
   isPublished: Int!
+  uid: String!
 }
 
 type Mutation {

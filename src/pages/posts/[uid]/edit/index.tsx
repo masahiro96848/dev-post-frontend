@@ -7,6 +7,8 @@ import { useSuccessToast } from '@/toastModal/useSuccessToast'
 
 const Page = () => {
   const router = useRouter()
+  const { uid } = router.query
+
   const { showToastSuccess } = useSuccessToast()
   const apolloErrorToast = useApolloErrorToast()
 
@@ -27,6 +29,7 @@ const Page = () => {
               body: values.body,
               imageUrl: values.imageUrl,
               isPublished: values.isPublished,
+              uid: uid as string,
             },
           },
         })

@@ -5,6 +5,7 @@ mutation Pages_Post_Edit($input: PostEditInput!) {
       body
       imageUrl
       isPublished
+      uid
     }
     errors
   }
