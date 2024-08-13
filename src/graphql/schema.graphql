@@ -42,10 +42,18 @@ input SignoutInput {
   userId: String
 }
 
+input PostEditInput {
+  title: String!
+  body: String
+  imageUrl: String
+  isPublished: Int!
+}
+
 type Mutation {
   signin(input: SigninInput!): SigninPayload
   signup(input: SignupInput!): SignupPayload
   signout(input: SignoutInput!): Boolean!
+  postEdit(input: PostEditInput!): PostEditPayload!
 }
 
 type SigninPayload {
@@ -55,5 +63,10 @@ type SigninPayload {
 
 type SignupPayload {
   user: User
+  errors: [String!]
+}
+
+type PostEditPayload {
+  post: Post
   errors: [String!]
 }

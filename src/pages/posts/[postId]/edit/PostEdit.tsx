@@ -25,10 +25,14 @@ import { zodResolver } from '@/utils/zodResolver'
 
 type FormValues = {
   title: string
-  body: string
+  body?: string
+  imageUrl?: string
+  isPublished: number
 }
 
-export const PostEdit: FC = () => {
+export const PostEdit: FC<{ onSubmit: (values: FormValues) => void }> = ({
+  onSubmit,
+}) => {
   const [isMobile, setIsMobile] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [isPublished, setIsPublished] = useState(false)
@@ -42,6 +46,8 @@ export const PostEdit: FC = () => {
     defaultValues: {
       title: '',
       body: '',
+      imageUrl: '',
+      isPublished: 0,
     },
   })
 
@@ -86,7 +92,7 @@ export const PostEdit: FC = () => {
             border="3px solid white"
             borderColor="#850b0bf"
           >
-            <form onSubmit={handleSubmit((v) => v)}>
+            <form onSubmit={handleSubmit((v) => onSubmit(v))}>
               <Stack spacing={4} flex="1">
                 <FormControl id="title" isInvalid={!!errors.title}>
                   <FormLabel fontSize="sm" fontWeight="600" color="gray.800">
@@ -234,6 +240,19 @@ export const PostEdit: FC = () => {
                     <FormErrorMessage>
                       {errors.title && errors.title.message}
                     </FormErrorMessage>
+                  </FormControl>
+
+                  {/* 追加: 本文の入力欄をここに移動 */}
+                  <FormControl id="body" mt="6">
+                    <FormLabel fontWeight="600" color="gray.800">
+                      本文
+                    </FormLabel>
+                    <Textarea
+                      size="lg"
+                      placeholder="技術内容を入力"
+                      height={600}
+                      {...register('body')}
+                    />
                   </FormControl>
                 </Stack>
                 <Box ml={8} flexShrink={0}>

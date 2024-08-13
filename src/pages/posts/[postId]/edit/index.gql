@@ -1,0 +1,11 @@
+mutation Pages_Post_Edit($input: PostEditInput!) {
+  postEdit(input: $input) {
+    post {
+      title
+      body
+      imageUrl
+      isPublished
+    }
+    errors
+  }
+}
