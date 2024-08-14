@@ -82,7 +82,7 @@ export const PostEdit: FC<{
     handleResize() // 初期実行
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [isValid])
 
   return (
     <PageRoot backgroundColor="gray.50">
@@ -117,7 +117,7 @@ export const PostEdit: FC<{
               </Stack>
 
               <Box flexShrink={0}>
-                <FormControl mt="6">
+                <FormControl id="imageUrl" mt="6">
                   <FormLabel
                     textAlign="left"
                     fontSize="sm"
@@ -160,7 +160,7 @@ export const PostEdit: FC<{
                     <Input
                       id="image-upload"
                       type="file"
-                      accept="image/*"
+                      accept=".png, .jpg"
                       {...register('imageUrl', {
                         onChange: handleImageChange,
                       })}
@@ -194,7 +194,8 @@ export const PostEdit: FC<{
                     isChecked={isPublished === 2}
                     {...register('isPublished', {
                       onChange: (e) => {
-                        setValue('isPublished', e.target.checked ? 2 : 1)
+                        const value = e.target.checked ? 2 : 1
+                        setValue('isPublished', value)
                       },
                     })}
                   />
@@ -266,7 +267,7 @@ export const PostEdit: FC<{
                 </Stack>
 
                 <Box ml={8} flexShrink={0}>
-                  <FormControl>
+                  <FormControl id="imageUrl">
                     <FormLabel fontWeight="600" color="gray.800">
                       画像をアップロード
                     </FormLabel>
@@ -307,7 +308,7 @@ export const PostEdit: FC<{
                       <Input
                         id="image-upload"
                         type="file"
-                        accept="image/*"
+                        accept=".png, .jpg"
                         {...register('imageUrl', {
                           onChange: handleImageChange,
                         })}
@@ -319,18 +320,23 @@ export const PostEdit: FC<{
               </Flex>
 
               <Flex align="center" justify="space-between" mt={6}>
-                <FormControl display="flex" alignItems="center">
+                <FormControl
+                  id="isPublished"
+                  display="flex"
+                  alignItems="center"
+                >
                   <FormLabel fontWeight="600" color="gray.800" mb="0">
                     公開ステータス
                   </FormLabel>
                   <Switch
-                    id="publish-status"
+                    id="isPublished"
                     ml={4}
                     size="lg"
                     isChecked={isPublished === 2}
                     {...register('isPublished', {
                       onChange: (e) => {
-                        setValue('isPublished', e.target.checked ? 2 : 1)
+                        const value = e.target.checked ? 2 : 1
+                        setValue('isPublished', value)
                       },
                     })}
                   />

@@ -42,6 +42,8 @@ export const postsSchema = z.object({
     .min(1, { message: '必須項目です' })
     .max(50, { message: 'タイトルは50文字以内で入力してください' }),
   body: z.string().optional(),
+  imageUrl: z.string().optional(),
+  isPublished: z.number().int(),
 })
 
 export const profileSchema = z.object({
