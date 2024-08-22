@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Link, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { User } from '@/types/graphql.gen'
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 export const Header: FC<Props> = (props: Props) => {
   const { viewer } = props
   const router = useRouter()
+  const uid = uuidv4()
 
   return (
     <Box
@@ -37,9 +39,18 @@ export const Header: FC<Props> = (props: Props) => {
             <Link href="/posts" color="white" fontSize="lg" mr={4}>
               記事一覧
             </Link>
+            <Link
+              href={`/posts/${uid}/edit`}
+              color="white"
+              fontSize="lg"
+              mr={4}
+            >
+              新規投稿
+            </Link>
             <Text color="white" fontSize="lg" mr={4}>
               {viewer.name}
             </Text>
+
             <Button
               onClick={() => {
                 router.push('/signout')

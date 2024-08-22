@@ -118,8 +118,8 @@ export const postsData = [
 
 export const postStatus = {
   0: '',
-  1: '公開済み',
-  2: '保存中',
+  1: '保存中',
+  2: '公開済み',
 } as const
 
 export type PostStatusKey = keyof typeof postStatus

@@ -21,29 +21,37 @@ import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { postsSchema } from '@/schemas/validationSchema'
+import { User } from '@/types/graphql.gen'
 import { zodResolver } from '@/utils/zodResolver'
 
 type FormValues = {
   title: string
-  description: string
-  body: string
+  body?: string
+  imageUrl?: string
+  isPublished: number
 }
 
-export const PostEdit: FC = () => {
+export const PostEdit: FC<{
+  viewer: User
+  onSubmit: (values: FormValues) => void
+}> = ({ viewer, onSubmit }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [isPublished, setIsPublished] = useState(false)
+
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: 'onChange',
     resolver: zodResolver(postsSchema),
     defaultValues: {
       title: '',
-      description: '',
       body: '',
+      imageUrl: '',
+      isPublished: 1,
     },
   })
 
@@ -52,7 +60,9 @@ export const PostEdit: FC = () => {
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        setImageSrc(reader.result as string)
+        const imageUrl = reader.result as string
+        setImageSrc(imageUrl)
+        setValue('imageUrl', imageUrl)
       }
       reader.readAsDataURL(file)
     }
@@ -62,9 +72,7 @@ export const PostEdit: FC = () => {
     document.getElementById('image-upload')?.click()
   }
 
-  const handleToggleChange = () => {
-    setIsPublished((prev) => !prev)
-  }
+  const isPublished = watch('isPublished', 1)
 
   useEffect(() => {
     const handleResize = () => {
@@ -74,11 +82,11 @@ export const PostEdit: FC = () => {
     handleResize() // 初期実行
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [isValid])
 
   return (
     <PageRoot backgroundColor="gray.50">
-      <Header />
+      <Header viewer={viewer} />
       <Box p={4}>
         {isMobile ? (
           <Container
@@ -88,7 +96,7 @@ export const PostEdit: FC = () => {
             border="3px solid white"
             borderColor="#850b0bf"
           >
-            <form onSubmit={handleSubmit((v) => v)}>
+            <form onSubmit={handleSubmit((v) => onSubmit(v))}>
               <Stack spacing={4} flex="1">
                 <FormControl id="title" isInvalid={!!errors.title}>
                   <FormLabel fontSize="sm" fontWeight="600" color="gray.800">
@@ -106,27 +114,10 @@ export const PostEdit: FC = () => {
                     {errors.title && errors.title.message}
                   </FormErrorMessage>
                 </FormControl>
-
-                <FormControl id="description" mt="6">
-                  <FormLabel fontSize="sm" fontWeight="600" color="gray.800">
-                    記事概要
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    size="lg"
-                    placeholder="概要を入力"
-                    px={4}
-                    py={8}
-                    {...register('description')}
-                  />
-                  <FormErrorMessage>
-                    {errors.description && errors.description.message}
-                  </FormErrorMessage>
-                </FormControl>
               </Stack>
 
               <Box flexShrink={0}>
-                <FormControl mt="6">
+                <FormControl id="imageUrl" mt="6">
                   <FormLabel
                     textAlign="left"
                     fontSize="sm"
@@ -169,8 +160,10 @@ export const PostEdit: FC = () => {
                     <Input
                       id="image-upload"
                       type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
+                      accept=".png, .jpg"
+                      {...register('imageUrl', {
+                        onChange: handleImageChange,
+                      })}
                       display="none"
                     />
                   </Flex>
@@ -198,16 +191,21 @@ export const PostEdit: FC = () => {
                     id="publish-status"
                     ml={4}
                     size="lg"
-                    isChecked={isPublished}
-                    onChange={handleToggleChange}
+                    isChecked={isPublished === 2}
+                    {...register('isPublished', {
+                      onChange: (e) => {
+                        const value = e.target.checked ? 2 : 1
+                        setValue('isPublished', value)
+                      },
+                    })}
                   />
                 </FormControl>
               </Flex>
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isPublished ? 'black' : 'gray.300'}
-                  color={isPublished ? 'white' : 'black'}
+                  bg={isPublished === 1 ? 'gray.300' : 'black'}
+                  color={isPublished === 1 ? 'black' : 'white'}
                   width="100%"
                   mx="auto"
                   size="lg"
@@ -216,11 +214,11 @@ export const PostEdit: FC = () => {
                   px={4}
                   py={8}
                   _hover={{
-                    bg: isPublished ? 'black' : 'gray.400',
+                    bg: isPublished === 1 ? 'gray.400' : 'black',
                   }}
                   isDisabled={!isValid}
                 >
-                  {isPublished ? '記事を公開する' : '下書きを保存する'}
+                  {isPublished === 1 ? '下書きを保存する' : '記事を公開する'}
                 </Button>
               </Stack>
             </form>
@@ -235,7 +233,7 @@ export const PostEdit: FC = () => {
             border="3px solid white"
             borderColor="#850b0bf"
           >
-            <form onSubmit={handleSubmit((v) => v)}>
+            <form onSubmit={handleSubmit((v) => onSubmit(v))}>
               <Flex>
                 <Stack spacing={4} flex="1">
                   <FormControl id="title" isInvalid={!!errors.title}>
@@ -255,26 +253,21 @@ export const PostEdit: FC = () => {
                     </FormErrorMessage>
                   </FormControl>
 
-                  <FormControl id="description" mt="6">
+                  <FormControl id="body" mt="6">
                     <FormLabel fontWeight="600" color="gray.800">
-                      記事概要
+                      本文
                     </FormLabel>
-                    <Input
-                      type="text"
+                    <Textarea
                       size="lg"
-                      placeholder="概要を入力"
-                      px={4}
-                      py={8}
-                      {...register('description')}
+                      placeholder="技術内容を入力"
+                      height={600}
+                      {...register('body')}
                     />
-                    <FormErrorMessage>
-                      {errors.description && errors.description.message}
-                    </FormErrorMessage>
                   </FormControl>
                 </Stack>
 
                 <Box ml={8} flexShrink={0}>
-                  <FormControl>
+                  <FormControl id="imageUrl">
                     <FormLabel fontWeight="600" color="gray.800">
                       画像をアップロード
                     </FormLabel>
@@ -315,8 +308,10 @@ export const PostEdit: FC = () => {
                       <Input
                         id="image-upload"
                         type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
+                        accept=".png, .jpg"
+                        {...register('imageUrl', {
+                          onChange: handleImageChange,
+                        })}
                         display="none"
                       />
                     </Flex>
@@ -324,37 +319,34 @@ export const PostEdit: FC = () => {
                 </Box>
               </Flex>
 
-              <FormControl id="body" mt="6">
-                <FormLabel fontWeight="600" color="gray.800">
-                  本文
-                </FormLabel>
-                <Textarea
-                  size="lg"
-                  placeholder="技術内容を入力"
-                  height={600}
-                  {...register('body')}
-                />
-              </FormControl>
-
               <Flex align="center" justify="space-between" mt={6}>
-                <FormControl display="flex" alignItems="center">
+                <FormControl
+                  id="isPublished"
+                  display="flex"
+                  alignItems="center"
+                >
                   <FormLabel fontWeight="600" color="gray.800" mb="0">
                     公開ステータス
                   </FormLabel>
                   <Switch
-                    id="publish-status"
+                    id="isPublished"
                     ml={4}
                     size="lg"
-                    isChecked={isPublished}
-                    onChange={handleToggleChange}
+                    isChecked={isPublished === 2}
+                    {...register('isPublished', {
+                      onChange: (e) => {
+                        const value = e.target.checked ? 2 : 1
+                        setValue('isPublished', value)
+                      },
+                    })}
                   />
                 </FormControl>
               </Flex>
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isPublished ? 'black' : 'gray.300'}
-                  color={isPublished ? 'white' : 'black'}
+                  bg={isPublished === 1 ? 'gray.300' : 'black'}
+                  color={isPublished === 1 ? 'black' : 'white'}
                   width="50%"
                   mx="auto"
                   size="lg"
@@ -363,11 +355,11 @@ export const PostEdit: FC = () => {
                   px={4}
                   py={8}
                   _hover={{
-                    bg: isPublished ? 'black' : 'gray.400',
+                    bg: isPublished === 1 ? 'gray.400' : 'black',
                   }}
                   isDisabled={!isValid}
                 >
-                  {isPublished ? '記事を公開する' : '下書きを保存する'}
+                  {isPublished === 1 ? '下書きを保存する' : '記事を公開する'}
                 </Button>
               </Stack>
             </form>
