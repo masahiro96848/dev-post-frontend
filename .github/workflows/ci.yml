@@ -33,7 +33,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Build Storybook
-        run: npm run build-storybook # Storybookのビルドを先に実行
+        run: npm run build-storybook
 
       - name: Run Storybook and run tests
         run: npm run test-storybook:ci

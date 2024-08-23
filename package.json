@@ -12,7 +12,7 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "test-storybook": "test-storybook",
-    "test-storybook:ci": "npx concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006\" \"npx wait-on tcp:6006 && npm run test-storybook\"",
+    "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\"",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -57,6 +57,7 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "eslint-config-prettier": "^9.0.0",
@@ -65,12 +66,14 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.8.0",
+    "http-server": "^14.1.1",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "prettier": "^3.0.3",
     "storybook": "^8.2.9",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^0.0.1-alpha.0"
+    "typescript-eslint": "^0.0.1-alpha.0",
+    "wait-on": "^8.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
