@@ -29,7 +29,7 @@ import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { Sidebar } from '@/components/navigation/Sidebar'
-import { postStatus, PostStatusKey } from '@/constants/post'
+import { postStatus, PostStatusKey, imageOrigin } from '@/constants/post'
 import { Post, User } from '@/types/graphql.gen'
 import { formatDate } from '@/utils/date'
 
@@ -252,7 +252,7 @@ export const Dashboard: FC<Props> = (props: Props) => {
                               >
                                 <Box>
                                   <Image
-                                    src={post.imageUrl ?? undefined}
+                                    src={imageOrigin + post.imageUrl ?? undefined}
                                     alt={post.title}
                                     width="100%"
                                     height="200px"
