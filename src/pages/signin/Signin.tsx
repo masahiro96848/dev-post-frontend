@@ -68,6 +68,7 @@ export const Signin: FC<{ onSubmit: (values: FormValues) => void }> = ({
                   px={4}
                   py={8}
                   placeholder="メールアドレスを入力"
+                  data-testid="email"
                   {...register('email')}
                 />
                 <FormErrorMessage>
@@ -84,6 +85,7 @@ export const Signin: FC<{ onSubmit: (values: FormValues) => void }> = ({
                   px={4}
                   py={8}
                   placeholder="パスワードを入力"
+                  data-testid="password"
                   {...register('password')}
                 />
                 <FormErrorMessage>

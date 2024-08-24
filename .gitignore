@@ -40,3 +40,7 @@ next-env.d.ts
 
 # eslint
 .eslintcache
+*storybook.log
+
+# storybook
+storybook-static
