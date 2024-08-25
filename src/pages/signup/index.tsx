@@ -14,7 +14,7 @@ const SignupPage: FC = () => {
   const [signup] = usePagesSignupMutation({
     onCompleted() {
       showToastSuccess('ユーザー登録に成功しました。')
-      router.push('/dashboard')
+      router.push('/posts')
     },
     onError: apolloErrorToast,
   })

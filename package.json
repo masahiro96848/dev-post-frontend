@@ -7,13 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir src",
-    "format": "next lint --fix --dir src",
+    "format": "next lint --fix --dir src && prettier --write src",
     "gen:graphql": "graphql-codegen",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "test-storybook": "test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npm run build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && npm run test-storybook\"",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test-playwright": "playwright test"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -41,6 +42,7 @@
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-apollo": "^4.3.0",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "@playwright/test": "^1.46.1",
     "@storybook/addon-essentials": "^8.2.9",
     "@storybook/addon-interactions": "^8.2.9",
     "@storybook/addon-links": "^8.2.9",

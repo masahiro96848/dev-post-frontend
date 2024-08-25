@@ -13,7 +13,7 @@ const SigninPage = () => {
   const [signin] = usePagesSigninMutation({
     onCompleted() {
       showToastSuccess('ログインに成功しました。')
-      router.push('/dashboard')
+      router.push('/posts')
     },
     onError: apolloErrorToast,
   })
