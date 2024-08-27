@@ -42,6 +42,7 @@ export const PostEdit: FC<{
     register,
     handleSubmit,
     setValue,
+    trigger,
     watch,
     formState: { errors, isValid },
   } = useForm<FormValues>({
@@ -55,14 +56,15 @@ export const PostEdit: FC<{
     },
   })
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const imageUrl = reader.result as string
         setImageSrc(imageUrl)
         setValue('imageUrl', imageUrl)
+        await trigger('imageUrl') // バリデーションをトリガー
       }
       reader.readAsDataURL(file)
     }
