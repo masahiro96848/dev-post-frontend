@@ -123,3 +123,5 @@ export const postStatus = {
 } as const
 
 export type PostStatusKey = keyof typeof postStatus
+
+export const imageOrigin = 'http://localhost:3000' as const

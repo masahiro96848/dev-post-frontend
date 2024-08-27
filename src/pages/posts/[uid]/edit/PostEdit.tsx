@@ -42,6 +42,7 @@ export const PostEdit: FC<{
     register,
     handleSubmit,
     setValue,
+    trigger,
     watch,
     formState: { errors, isValid },
   } = useForm<FormValues>({
@@ -51,18 +52,19 @@ export const PostEdit: FC<{
       title: '',
       body: '',
       imageUrl: '',
-      isPublished: 1,
+      isPublished: 0,
     },
   })
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const imageUrl = reader.result as string
         setImageSrc(imageUrl)
         setValue('imageUrl', imageUrl)
+        await trigger('imageUrl') // バリデーションをトリガー
       }
       reader.readAsDataURL(file)
     }
@@ -75,6 +77,7 @@ export const PostEdit: FC<{
   const isPublished = watch('isPublished', 1)
 
   useEffect(() => {
+    setValue('isPublished', isPublished || 1)
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768)
     }
@@ -82,7 +85,7 @@ export const PostEdit: FC<{
     handleResize() // 初期実行
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [isValid])
+  }, [isPublished, setValue])
 
   return (
     <PageRoot backgroundColor="gray.50">
@@ -188,16 +191,14 @@ export const PostEdit: FC<{
                     公開ステータス
                   </FormLabel>
                   <Switch
-                    id="publish-status"
+                    id="isPublished"
                     ml={4}
                     size="lg"
                     isChecked={isPublished === 2}
-                    {...register('isPublished', {
-                      onChange: (e) => {
-                        const value = e.target.checked ? 2 : 1
-                        setValue('isPublished', value)
-                      },
-                    })}
+                    onChange={(e) => {
+                      const value = e.target.checked ? 2 : 1
+                      setValue('isPublished', value)
+                    }}
                   />
                 </FormControl>
               </Flex>
@@ -333,16 +334,13 @@ export const PostEdit: FC<{
                     ml={4}
                     size="lg"
                     isChecked={isPublished === 2}
-                    {...register('isPublished', {
-                      onChange: (e) => {
-                        const value = e.target.checked ? 2 : 1
-                        setValue('isPublished', value)
-                      },
-                    })}
+                    onChange={(e) => {
+                      const value = e.target.checked ? 2 : 1
+                      setValue('isPublished', value)
+                    }}
                   />
                 </FormControl>
               </Flex>
-
               <Stack spacing={10} mt={12}>
                 <Button
                   bg={isPublished === 1 ? 'gray.300' : 'black'}
