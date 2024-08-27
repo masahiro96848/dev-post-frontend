@@ -1,4 +1,7 @@
 query Pages_Post_Detail_Index($uid: String!, $name: String!) {
+  viewer {
+    ...Pages_Post_Detail_User
+  }
   postDetail(uid: $uid, name: $name) {
     ...Pages_Post_Detail
   }
@@ -13,4 +16,9 @@ fragment Pages_Post_Detail on Post {
     name
   }
   createdAt
+}
+
+fragment Pages_Post_Detail_User on User {
+  name
+  email
 }

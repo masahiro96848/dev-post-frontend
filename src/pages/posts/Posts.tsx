@@ -22,6 +22,7 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
+import { imageOrigin } from '@/constants/post'
 import { Post, User } from '@/types/graphql.gen'
 
 type Props = {
@@ -96,7 +97,11 @@ export const Posts: FC<Props> = (props: Props) => {
                   >
                     <CardBody p="0" display="flex" alignItems="center">
                       <Image
-                        src={post.imageUrl ?? undefined}
+                        src={
+                          post.imageUrl
+                            ? imageOrigin + post.imageUrl
+                            : undefined
+                        }
                         alt={post.title}
                         width="80px"
                         height="80px"
@@ -210,7 +215,11 @@ export const Posts: FC<Props> = (props: Props) => {
                       >
                         <Box>
                           <Image
-                            src={post.imageUrl ?? undefined}
+                            src={
+                              post.imageUrl
+                                ? imageOrigin + post.imageUrl
+                                : undefined
+                            }
                             alt={post.title}
                             width="100%"
                             height="200px"

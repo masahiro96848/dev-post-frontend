@@ -27,7 +27,7 @@ const Page: NextPage<PageProps> = (props: PageProps) => {
   if (!data?.postDetail) {
     return <Loading />
   }
-  return <Detail post={data.postDetail} />
+  return <Detail viewer={data.viewer} post={data.postDetail} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

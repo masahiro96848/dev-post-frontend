@@ -29,7 +29,7 @@ export const Header: FC<Props> = (props: Props) => {
       borderBottomColor="gray.200"
     >
       <Box>
-        <Link href="/" color="white" fontSize="3xl" mr={4}>
+        <Link href="/posts" color="white" fontSize="3xl" mr={4}>
           Dev Post
         </Link>
       </Box>

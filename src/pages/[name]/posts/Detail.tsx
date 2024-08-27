@@ -13,14 +13,16 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
-import { Post } from '@/types/graphql.gen'
+import { imageOrigin } from '@/constants/post'
+import { Post, User } from '@/types/graphql.gen'
 import { formatDate } from '@/utils/date'
 
 type Props = {
+  viewer?: User | null
   post: Post
 }
 export const Detail: FC<Props> = (props: Props) => {
-  const { post } = props
+  const { viewer, post } = props
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export const Detail: FC<Props> = (props: Props) => {
 
   return (
     <PageRoot backgroundColor="gray.50">
-      <Header />
+      <Header viewer={viewer ?? undefined} />
       <Box p={4}>
         {isMobile ? (
           <Container
@@ -48,7 +50,7 @@ export const Detail: FC<Props> = (props: Props) => {
           >
             <Box>
               <Image
-                src={post.imageUrl ?? undefined}
+                src={post.imageUrl ? imageOrigin + post.imageUrl : undefined}
                 alt="Article Image"
                 w="100%"
                 h="auto"
@@ -87,7 +89,7 @@ export const Detail: FC<Props> = (props: Props) => {
           >
             <Box>
               <Image
-                src={post.imageUrl ?? undefined}
+                src={post.imageUrl ? imageOrigin + post.imageUrl : undefined}
                 alt="Article Image"
                 w="100%"
                 h="auto"
