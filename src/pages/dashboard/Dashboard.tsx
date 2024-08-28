@@ -165,7 +165,7 @@ export const Dashboard: FC<Props> = (props: Props) => {
                                   as={FaStar}
                                   color="yellow.400"
                                 />
-                                <Text ml="2">4.5</Text>
+                                <Text ml="2">{post.favoritesCount}</Text>
                               </Flex>
                             </CardBody>
                           </Card>
@@ -317,7 +317,7 @@ export const Dashboard: FC<Props> = (props: Props) => {
                                       as={FaStar}
                                       color="yellow.400"
                                     />
-                                    <Text ml="2">4.5</Text>
+                                    <Text ml="2"> {post.favoritesCount}</Text>
                                   </Flex>
                                 </Flex>
                               </CardBody>

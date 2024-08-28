@@ -16,8 +16,16 @@ type Post {
   isPublished: Int
   uid: String!
   user: User!
+  favoritesCount: Int!
   createdAt: Date
   updatedAt: Date
+}
+
+type Favorite {
+  id: ID!
+  user: User!
+  post: Post!
+  created_at: Date!
 }
 
 type Query {
@@ -25,6 +33,7 @@ type Query {
   posts: [Post!]!
   postDetail(uid: String!, name: String!): Post! 
   myPosts: [Post!]!
+  favorites: [Favorite!]!
 }
 
 input SigninInput {

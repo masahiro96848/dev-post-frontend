@@ -66,7 +66,7 @@ export const Detail: FC<Props> = (props: Props) => {
                   <Icon boxSize={6} as={FaStar} color="yellow.400" mt={1} />
                 </Box>
                 <Text fontSize="lg" ml={2}>
-                  7
+                  {post.favoritesCount}
                 </Text>
               </Flex>
             </Flex>
@@ -105,7 +105,7 @@ export const Detail: FC<Props> = (props: Props) => {
                   <Icon boxSize={6} as={FaStar} color="yellow.400" mt={1} />
                 </Box>
                 <Text fontSize="lg" ml={2}>
-                  7
+                  {post.favoritesCount}
                 </Text>
               </Flex>
             </Flex>
