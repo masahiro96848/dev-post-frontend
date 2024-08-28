@@ -35,6 +35,8 @@ export const Posts: FC<Props> = (props: Props) => {
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
 
+  console.log(posts)
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
@@ -127,7 +129,7 @@ export const Posts: FC<Props> = (props: Props) => {
                       </Stack>
                       <Flex justify="flex-end" align="center" ml="auto" pr="4">
                         <Icon boxSize={4} as={FaStar} color="yellow.400" />
-                        <Text ml="2">4.5</Text>
+                        <Text ml="2">{post.favoritesCount}</Text>
                       </Flex>
                     </CardBody>
                   </Card>
@@ -241,7 +243,7 @@ export const Posts: FC<Props> = (props: Props) => {
                         </Box>
                         <Flex justify="flex-end" align="center" p="4">
                           <Icon boxSize={8} as={FaStar} color="yellow.400" />
-                          <Text ml="2">4.5</Text>
+                          <Text ml="2">{post.favoritesCount}</Text>
                         </Flex>
                       </CardBody>
                     </Card>

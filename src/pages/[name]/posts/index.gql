@@ -12,6 +12,7 @@ fragment Pages_Post_Detail on Post {
   imageUrl
   isPublished
   uid
+  favoritesCount
   user {
     name
   }
