@@ -9,11 +9,16 @@ import {
 } from '@chakra-ui/react'
 import React, { FC, useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
+import {
+  usePagesPostDetailAddFavoriteMutation,
+  usePagesPostDetailRemoveFavoriteMutation,
+} from './Detail.gen'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { imageOrigin } from '@/constants/post'
+import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
 import { Post, User } from '@/types/graphql.gen'
 import { formatDate } from '@/utils/date'
 
@@ -24,6 +29,41 @@ type Props = {
 export const Detail: FC<Props> = (props: Props) => {
   const { viewer, post } = props
   const [isMobile, setIsMobile] = useState(false)
+  const [favorited, setFavorited] = useState<boolean>(post.favorited || false)
+  const [favoritesCount, setFavoritesCount] = useState<number>(
+    post.favoritesCount,
+  )
+
+  const apolloErrorToast = useApolloErrorToast()
+
+  const [addFavorite] = usePagesPostDetailAddFavoriteMutation({
+    onCompleted() {},
+    onError: apolloErrorToast,
+  })
+
+  const [removeFavorite] = usePagesPostDetailRemoveFavoriteMutation({
+    onCompleted() {},
+    onError: apolloErrorToast,
+  })
+
+  const handleFavoriteToggle = async (postId: string, isFavorited: boolean) => {
+    try {
+      if (isFavorited) {
+        setFavorited(false)
+        setFavoritesCount((prev) => prev - 1)
+        await removeFavorite({ variables: { input: { postId } } })
+      } else {
+        setFavorited(true)
+        setFavoritesCount((prev) => prev + 1)
+        await addFavorite({ variables: { input: { postId } } })
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error)
+      // エラーが発生した場合、UIを元に戻す
+      setFavorited(isFavorited)
+      setFavoritesCount((prev) => (isFavorited ? prev + 1 : prev - 1))
+    }
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,12 +102,28 @@ export const Detail: FC<Props> = (props: Props) => {
                 {formatDate(post.createdAt)}
               </Text>
               <Flex alignItems="center">
-                <Box>
-                  <Icon boxSize={6} as={FaStar} color="yellow.400" mt={1} />
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  cursor="pointer"
+                  onClick={() =>
+                    post.id && favorited !== null
+                      ? handleFavoriteToggle(post.id, favorited)
+                      : console.error(
+                          'Post ID or favorited status is undefined or null',
+                        )
+                  }
+                >
+                  <Icon
+                    boxSize={6}
+                    as={FaStar}
+                    color={favorited ? 'yellow.400' : 'gray.400'}
+                    mt={1}
+                  />
+                  <Text fontSize="lg" ml={2}>
+                    {post.favoritesCount}
+                  </Text>
                 </Box>
-                <Text fontSize="lg" ml={2}>
-                  {post.favoritesCount}
-                </Text>
               </Flex>
             </Flex>
             <Heading as="h2" fontSize="lg" mt={4}>
@@ -101,12 +157,28 @@ export const Detail: FC<Props> = (props: Props) => {
                 {formatDate(post.createdAt)}
               </Text>
               <Flex alignItems="center">
-                <Box>
-                  <Icon boxSize={6} as={FaStar} color="yellow.400" mt={1} />
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  cursor="pointer"
+                  onClick={() =>
+                    post.id && favorited !== null
+                      ? handleFavoriteToggle(post.id, favorited)
+                      : console.error(
+                          'Post ID or favorited status is undefined or null',
+                        )
+                  }
+                >
+                  <Icon
+                    boxSize={6}
+                    as={FaStar}
+                    color={favorited ? 'yellow.400' : 'gray.400'}
+                    mt={1}
+                  />
+                  <Text fontSize="lg" ml={2}>
+                    {favoritesCount}
+                  </Text>
                 </Box>
-                <Text fontSize="lg" ml={2}>
-                  {post.favoritesCount}
-                </Text>
               </Flex>
             </Flex>
             <Heading as="h2" size="lg" mt={4}>
