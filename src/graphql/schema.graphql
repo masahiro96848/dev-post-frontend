@@ -16,6 +16,7 @@ type Post {
   isPublished: Int
   uid: String!
   user: User!
+  favorited: Boolean
   favoritesCount: Int!
   createdAt: Date
   updatedAt: Date
@@ -59,11 +60,21 @@ input PostEditInput {
   uid: String!
 }
 
+input AddFavoriteInput {
+  postId: String!
+}
+
+input RemoveFavoriteInput {
+  postId: String!
+}
+
 type Mutation {
   signin(input: SigninInput!): SigninPayload
   signup(input: SignupInput!): SignupPayload
   signout(input: SignoutInput!): Boolean!
   postEdit(input: PostEditInput!): PostEditPayload!
+  addFavorite(input: AddFavoriteInput!): AddFavoritePayload!
+  removeFavorite(input: RemoveFavoriteInput!): RemoveFavoritePayload!
 }
 
 type SigninPayload {
@@ -78,5 +89,17 @@ type SignupPayload {
 
 type PostEditPayload {
   post: Post
+  errors: [String!]
+}
+
+type AddFavoritePayload {
+  favorite: Favorite
+  post: Post
+  errors: [String!]
+}
+
+type RemoveFavoritePayload {
+  post: Post
+  success: Boolean!
   errors: [String!]
 }

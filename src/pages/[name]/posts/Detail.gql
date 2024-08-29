@@ -1,0 +1,25 @@
+mutation Pages_Post_Detail_AddFavorite($input: AddFavoriteInput!) {
+  addFavorite(input: $input) {
+    favorite {
+      id
+      post {
+        id
+        favorited
+        favoritesCount
+      }
+    }
+    errors
+  }
+}
+
+mutation Pages_Post_Detail_RemoveFavorite($input: RemoveFavoriteInput!) {
+  removeFavorite(input: $input) {
+    post {
+      id
+      favorited
+      favoritesCount
+    }
+    success
+    errors
+  }
+}

@@ -9,11 +9,17 @@ import {
 } from '@chakra-ui/react'
 import React, { FC, useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
+import {
+  usePagesPostDetailAddFavoriteMutation,
+  usePagesPostDetailRemoveFavoriteMutation,
+} from './Detail.gen'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { imageOrigin } from '@/constants/post'
+import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
+import { useSuccessToast } from '@/toastModal/useSuccessToast'
 import { Post, User } from '@/types/graphql.gen'
 import { formatDate } from '@/utils/date'
 
@@ -24,6 +30,31 @@ type Props = {
 export const Detail: FC<Props> = (props: Props) => {
   const { viewer, post } = props
   const [isMobile, setIsMobile] = useState(false)
+
+  const { showToastSuccess } = useSuccessToast()
+  const apolloErrorToast = useApolloErrorToast()
+
+  const [addFavorite] = usePagesPostDetailAddFavoriteMutation({
+    onCompleted() {
+      showToastSuccess('いいねしました。')
+    },
+    onError: apolloErrorToast,
+  })
+
+  const [removeFavorite] = usePagesPostDetailRemoveFavoriteMutation({
+    onCompleted() {
+      showToastSuccess('いいねを削除しました。')
+    },
+    onError: apolloErrorToast,
+  })
+
+  const handleFavoriteToggle = (postId: string, isFavorited: boolean) => {
+    if (isFavorited) {
+      removeFavorite({ variables: { input: { postId } } })
+    } else {
+      addFavorite({ variables: { input: { postId } } })
+    }
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,12 +93,28 @@ export const Detail: FC<Props> = (props: Props) => {
                 {formatDate(post.createdAt)}
               </Text>
               <Flex alignItems="center">
-                <Box>
-                  <Icon boxSize={6} as={FaStar} color="yellow.400" mt={1} />
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  cursor="pointer"
+                  onClick={() =>
+                    post.id && post.favorited
+                      ? handleFavoriteToggle(post.id, post.favorited)
+                      : console.error(
+                          'Post ID or favorited status is undefined',
+                        )
+                  }
+                >
+                  <Icon
+                    boxSize={6}
+                    as={FaStar}
+                    color={post.favorited ? 'yellow.400' : 'gray.400'}
+                    mt={1}
+                  />
+                  <Text fontSize="lg" ml={2}>
+                    {post.favoritesCount}
+                  </Text>
                 </Box>
-                <Text fontSize="lg" ml={2}>
-                  {post.favoritesCount}
-                </Text>
               </Flex>
             </Flex>
             <Heading as="h2" fontSize="lg" mt={4}>
@@ -101,12 +148,28 @@ export const Detail: FC<Props> = (props: Props) => {
                 {formatDate(post.createdAt)}
               </Text>
               <Flex alignItems="center">
-                <Box>
-                  <Icon boxSize={6} as={FaStar} color="yellow.400" mt={1} />
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  cursor="pointer"
+                  onClick={() =>
+                    post.id && post.favorited
+                      ? handleFavoriteToggle(post.id, post.favorited)
+                      : console.error(
+                          'Post ID or favorited status is undefined',
+                        )
+                  }
+                >
+                  <Icon
+                    boxSize={6}
+                    as={FaStar}
+                    color={post.favorited ? 'yellow.400' : 'gray.400'}
+                    mt={1}
+                  />
+                  <Text fontSize="lg" ml={2}>
+                    {post.favoritesCount}
+                  </Text>
                 </Box>
-                <Text fontSize="lg" ml={2}>
-                  {post.favoritesCount}
-                </Text>
               </Flex>
             </Flex>
             <Heading as="h2" size="lg" mt={4}>

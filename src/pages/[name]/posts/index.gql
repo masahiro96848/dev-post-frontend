@@ -7,11 +7,13 @@ query Pages_Post_Detail_Index($uid: String!, $name: String!) {
   }
 }
 fragment Pages_Post_Detail on Post {
+  id
   title
   body
   imageUrl
   isPublished
   uid
+  favorited
   favoritesCount
   user {
     name
