@@ -19,7 +19,6 @@ import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { imageOrigin } from '@/constants/post'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
-import { useSuccessToast } from '@/toastModal/useSuccessToast'
 import { Post, User } from '@/types/graphql.gen'
 import { formatDate } from '@/utils/date'
 
@@ -30,29 +29,39 @@ type Props = {
 export const Detail: FC<Props> = (props: Props) => {
   const { viewer, post } = props
   const [isMobile, setIsMobile] = useState(false)
+  const [favorited, setFavorited] = useState<boolean>(post.favorited || false)
+  const [favoritesCount, setFavoritesCount] = useState<number>(
+    post.favoritesCount,
+  )
 
-  const { showToastSuccess } = useSuccessToast()
   const apolloErrorToast = useApolloErrorToast()
 
   const [addFavorite] = usePagesPostDetailAddFavoriteMutation({
-    onCompleted() {
-      showToastSuccess('いいねしました。')
-    },
+    onCompleted() {},
     onError: apolloErrorToast,
   })
 
   const [removeFavorite] = usePagesPostDetailRemoveFavoriteMutation({
-    onCompleted() {
-      showToastSuccess('いいねを削除しました。')
-    },
+    onCompleted() {},
     onError: apolloErrorToast,
   })
 
-  const handleFavoriteToggle = (postId: string, isFavorited: boolean) => {
-    if (isFavorited) {
-      removeFavorite({ variables: { input: { postId } } })
-    } else {
-      addFavorite({ variables: { input: { postId } } })
+  const handleFavoriteToggle = async (postId: string, isFavorited: boolean) => {
+    try {
+      if (isFavorited) {
+        setFavorited(false)
+        setFavoritesCount((prev) => prev - 1)
+        await removeFavorite({ variables: { input: { postId } } })
+      } else {
+        setFavorited(true)
+        setFavoritesCount((prev) => prev + 1)
+        await addFavorite({ variables: { input: { postId } } })
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error)
+      // エラーが発生した場合、UIを元に戻す
+      setFavorited(isFavorited)
+      setFavoritesCount((prev) => (isFavorited ? prev + 1 : prev - 1))
     }
   }
 
@@ -98,17 +107,17 @@ export const Detail: FC<Props> = (props: Props) => {
                   alignItems="center"
                   cursor="pointer"
                   onClick={() =>
-                    post.id && post.favorited
-                      ? handleFavoriteToggle(post.id, post.favorited)
+                    post.id && favorited !== null
+                      ? handleFavoriteToggle(post.id, favorited)
                       : console.error(
-                          'Post ID or favorited status is undefined',
+                          'Post ID or favorited status is undefined or null',
                         )
                   }
                 >
                   <Icon
                     boxSize={6}
                     as={FaStar}
-                    color={post.favorited ? 'yellow.400' : 'gray.400'}
+                    color={favorited ? 'yellow.400' : 'gray.400'}
                     mt={1}
                   />
                   <Text fontSize="lg" ml={2}>
@@ -153,21 +162,21 @@ export const Detail: FC<Props> = (props: Props) => {
                   alignItems="center"
                   cursor="pointer"
                   onClick={() =>
-                    post.id && post.favorited
-                      ? handleFavoriteToggle(post.id, post.favorited)
+                    post.id && favorited !== null
+                      ? handleFavoriteToggle(post.id, favorited)
                       : console.error(
-                          'Post ID or favorited status is undefined',
+                          'Post ID or favorited status is undefined or null',
                         )
                   }
                 >
                   <Icon
                     boxSize={6}
                     as={FaStar}
-                    color={post.favorited ? 'yellow.400' : 'gray.400'}
+                    color={favorited ? 'yellow.400' : 'gray.400'}
                     mt={1}
                   />
                   <Text fontSize="lg" ml={2}>
-                    {post.favoritesCount}
+                    {favoritesCount}
                   </Text>
                 </Box>
               </Flex>
