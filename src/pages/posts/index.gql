@@ -1,10 +1,11 @@
-query Pages_Posts_Index {
+query Pages_Posts_Index($limit: Int, $offset: Int) {
   viewer {
     ...Pages_Posts_User
   }
-  posts {
+  posts(limit: $limit, offset: $offset) {
     ...Pages_Posts_Post
   }
+  totalPosts
 }
 
 fragment Pages_Posts_User on User {
