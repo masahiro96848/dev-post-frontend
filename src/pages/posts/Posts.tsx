@@ -7,23 +7,15 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
   Button,
-  Card,
-  CardBody,
-  Image,
-  Stack,
-  Link,
-  Icon,
 } from '@chakra-ui/react'
-import React, { FC, useEffect, useState } from 'react'
-import { FaStar } from 'react-icons/fa'
+import React, { FC, useEffect, useState, useMemo, useCallback } from 'react'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { Pagination } from '@/components/ui/Pagination'
-import { imageOrigin } from '@/constants/post'
+import { MemoizedPostCard } from '@/components/ui/Post/Card'
 import { Post, User } from '@/types/graphql.gen'
 
 type Props = {
@@ -44,15 +36,18 @@ export const Posts: FC<Props> = (props: Props) => {
     postsPerPage,
     setCurrentPage,
   } = props
-  const [isMobile, setIsMobile] = useState(false)
-  const [isTablet, setIsTablet] = useState(false)
+  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [isTablet, setIsTablet] = useState<boolean>(false)
 
-  const totalPages = Math.ceil(totalPosts / postsPerPage)
+  const totalPages = useMemo(
+    () => Math.ceil(totalPosts / postsPerPage),
+    [totalPosts, postsPerPage],
+  )
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
-      setIsMobile(window.innerWidth < 768)
+      setIsMobile(width < 768)
       setIsTablet(width >= 768 && width < 1024)
     }
 
@@ -61,12 +56,19 @@ export const Posts: FC<Props> = (props: Props) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(page)
+    },
+    [setCurrentPage],
+  )
+
   return (
     <PageRoot backgroundColor="gray.50">
       <Header viewer={viewer ?? undefined} />
       {isMobile ? (
         <Box p="24px">
-          <Box px="24px" py="24px">
+          <Box py="24px">
             <Heading fontSize="2xl" textAlign="left">
               最新投稿一覧
             </Heading>
@@ -93,64 +95,12 @@ export const Posts: FC<Props> = (props: Props) => {
           <Box>
             <Flex wrap="wrap" justifyContent="center">
               {posts.map((post, index) => (
-                <Link
-                  href={`${post.user.name}/posts/${post.uid}`}
-                  key={index}
-                  textDecoration="none"
-                  mb={4}
-                >
-                  <Card
-                    width="320px"
-                    maxWidth="100%"
-                    border="1px solid"
-                    borderColor="gray.200"
-                    borderRadius="md"
-                    height="80px"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <CardBody p="0" display="flex" alignItems="center">
-                      <Image
-                        src={
-                          post.imageUrl
-                            ? imageOrigin + post.imageUrl
-                            : undefined
-                        }
-                        alt={post.title}
-                        width="80px"
-                        height="80px"
-                        borderRadius="md"
-                      />
-                      <Stack
-                        spacing="3"
-                        pl="4"
-                        pr="4"
-                        height="100%"
-                        justifyContent="center"
-                      >
-                        <Heading size="sm" noOfLines={1}>
-                          {post.title.length > 30
-                            ? `${post.title.slice(0, 30)}...`
-                            : post.title}
-                        </Heading>
-                        <Text color="gray.500" noOfLines={1}>
-                          {post.body && post.body.length > 20
-                            ? `${post.body.slice(0, 20)}...`
-                            : post.body || ''}
-                        </Text>
-                      </Stack>
-                      <Flex justify="flex-end" align="center" ml="auto" pr="4">
-                        <Icon boxSize={4} as={FaStar} color="yellow.400" />
-                        <Text ml="2">{post.favoritesCount}</Text>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                </Link>
+                <MemoizedPostCard key={index} post={post} isMobile={isMobile} />
               ))}
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage}
+                onPageChange={handlePageChange}
               />
             </Flex>
           </Box>
@@ -208,63 +158,7 @@ export const Posts: FC<Props> = (props: Props) => {
                 justifyContent="flex-start" // 常に左揃え
               >
                 {posts.map((post, index) => (
-                  <Link
-                    href={`${post.user.name}/posts/${post.uid}`}
-                    key={index}
-                    textDecoration="none"
-                  >
-                    <Card
-                      width={{ base: '100%', md: '300px' }} // タブレットで300pxの固定幅
-                      maxW="100%"
-                      border="1px solid"
-                      borderColor="gray.200"
-                      borderRadius="md"
-                      height="400px"
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="space-between"
-                      mx={{ base: 0, md: '8px' }} // 両側に8pxの余白を設定
-                      mb={{ base: '8px', md: '8px' }} // 下側に8pxの余白を設定
-                    >
-                      <CardBody
-                        p="0"
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="space-between"
-                      >
-                        <Box>
-                          <Image
-                            src={
-                              post.imageUrl
-                                ? imageOrigin + post.imageUrl
-                                : undefined
-                            }
-                            alt={post.title}
-                            width="100%"
-                            height="200px"
-                            objectFit="cover"
-                            borderTopRadius="md"
-                          />
-                          <Stack mt="6" spacing="3" p="4">
-                            <Heading size="md">
-                              {post.title.length > 30
-                                ? `${post.title.slice(0, 30)}...`
-                                : post.title}
-                            </Heading>
-                            <Text color="gray.500">
-                              {post.body && post.body.length > 20
-                                ? `${post.body.slice(0, 20)}...`
-                                : post.body || ''}
-                            </Text>
-                          </Stack>
-                        </Box>
-                        <Flex justify="flex-end" align="center" p="4">
-                          <Icon boxSize={8} as={FaStar} color="yellow.400" />
-                          <Text ml="2">{post.favoritesCount}</Text>
-                        </Flex>
-                      </CardBody>
-                    </Card>
-                  </Link>
+                  <MemoizedPostCard key={index} post={post} />
                 ))}
               </Flex>
             </Box>
@@ -272,7 +166,7 @@ export const Posts: FC<Props> = (props: Props) => {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
           />
         </Box>
       )}
