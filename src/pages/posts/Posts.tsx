@@ -22,20 +22,32 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
+import { Pagination } from '@/components/ui/Pagination'
 import { imageOrigin } from '@/constants/post'
 import { Post, User } from '@/types/graphql.gen'
 
 type Props = {
   viewer?: User | null
   posts: Post[]
+  totalPosts: number
+  currentPage: number
+  postsPerPage: number
+  setCurrentPage: (page: number) => void
 }
 
 export const Posts: FC<Props> = (props: Props) => {
-  const { viewer, posts } = props
+  const {
+    viewer,
+    posts,
+    totalPosts,
+    currentPage,
+    postsPerPage,
+    setCurrentPage,
+  } = props
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
 
-  console.log(posts)
+  const totalPages = Math.ceil(totalPosts / postsPerPage)
 
   useEffect(() => {
     const handleResize = () => {
@@ -135,6 +147,11 @@ export const Posts: FC<Props> = (props: Props) => {
                   </Card>
                 </Link>
               ))}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </Flex>
           </Box>
         </Box>
@@ -252,6 +269,11 @@ export const Posts: FC<Props> = (props: Props) => {
               </Flex>
             </Box>
           </Box>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </Box>
       )}
       <PagePadding />

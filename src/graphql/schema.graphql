@@ -31,10 +31,11 @@ type Favorite {
 
 type Query {
   viewer: User!
-  posts: [Post!]!
-  postDetail(uid: String!, name: String!): Post! 
+  posts(limit: Int, offset: Int): [Post!]!
+  postDetail(uid: String!, name: String!): Post!
   myPosts: [Post!]!
   favorites: [Favorite!]!
+  totalPosts: Int!
 }
 
 input SigninInput {
