@@ -51,7 +51,7 @@ export const Posts: FC<Props> = (props: Props) => {
       setIsTablet(width >= 768 && width < 1024)
     }
 
-    handleResize() // 初期実行
+    handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])

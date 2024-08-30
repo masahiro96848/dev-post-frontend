@@ -45,7 +45,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isMobile }) => {
             alt={post.title}
             width={isMobile ? '100%' : '100%'}
             height={isMobile ? '100%' : '100%'}
-            objectFit="cover"
+            loading="lazy"
           />
         </Box>
         <CardBody
