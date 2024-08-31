@@ -25,6 +25,8 @@ type Props = {
   currentPage: number
   postsPerPage: number
   setCurrentPage: (page: number) => void
+  setSortBy: (sortBy: string) => void
+  setOrder: (order: string) => void
 }
 
 export const Posts: FC<Props> = (props: Props) => {
@@ -35,6 +37,8 @@ export const Posts: FC<Props> = (props: Props) => {
     currentPage,
     postsPerPage,
     setCurrentPage,
+    setSortBy,
+    setOrder,
   } = props
   const [isMobile, setIsMobile] = useState<boolean>(false)
   const [isTablet, setIsTablet] = useState<boolean>(false)
@@ -63,6 +67,15 @@ export const Posts: FC<Props> = (props: Props) => {
     [setCurrentPage],
   )
 
+  const handleSortChange = useCallback(
+    (sort_by: string, order: string) => {
+      setSortBy(sort_by)
+      setOrder(order)
+      setCurrentPage(1) // ソートを変更したらページをリセット
+    },
+    [setSortBy, setOrder, setCurrentPage],
+  )
+
   return (
     <PageRoot backgroundColor="gray.50">
       <Header viewer={viewer ?? undefined} />
@@ -86,8 +99,16 @@ export const Posts: FC<Props> = (props: Props) => {
                   更新日順
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>更新日順</MenuItem>
-                  <MenuItem>スターの多い順</MenuItem>
+                  <MenuItem
+                    onClick={() => handleSortChange('created_at', 'desc')}
+                  >
+                    更新日順
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => handleSortChange('favorites_count', 'desc')}
+                  >
+                    スターの多い順
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Flex>
@@ -140,8 +161,16 @@ export const Posts: FC<Props> = (props: Props) => {
                   更新日順
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>更新日順</MenuItem>
-                  <MenuItem>スターの多い順</MenuItem>
+                  <MenuItem
+                    onClick={() => handleSortChange('created_at', 'desc')}
+                  >
+                    更新日順
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => handleSortChange('favorites_count', 'desc')}
+                  >
+                    スターの多い順
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Flex>

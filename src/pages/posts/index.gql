@@ -26,3 +26,18 @@ fragment Pages_Posts_Post on Post {
   createdAt
   updatedAt
 }
+
+mutation Pages_Posts_Sort(
+  $sortBy: String!
+  $order: String!
+  $limit: Int
+  $offset: Int
+) {
+  postSort(
+    input: { sortBy: $sortBy, order: $order, limit: $limit, offset: $offset }
+  ) {
+    posts {
+      ...Pages_Posts_Post
+    }
+  }
+}

@@ -69,6 +69,13 @@ input RemoveFavoriteInput {
   postId: String!
 }
 
+input PostSortInput {
+  sortBy: String!
+  order: String!
+  limit: Int
+  offset: Int
+}
+
 type Mutation {
   signin(input: SigninInput!): SigninPayload
   signup(input: SignupInput!): SignupPayload
@@ -76,6 +83,7 @@ type Mutation {
   postEdit(input: PostEditInput!): PostEditPayload!
   addFavorite(input: AddFavoriteInput!): AddFavoritePayload!
   removeFavorite(input: RemoveFavoriteInput!): RemoveFavoritePayload!
+  postSort(input: PostSortInput!): PostSortPayload!
 }
 
 type SigninPayload {
@@ -103,4 +111,8 @@ type RemoveFavoritePayload {
   post: Post
   success: Boolean!
   errors: [String!]
+}
+
+type PostSortPayload {
+  posts: [Post!]!
 }
