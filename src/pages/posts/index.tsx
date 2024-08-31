@@ -1,5 +1,6 @@
 import { Spinner, Center } from '@chakra-ui/react'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import React, { useState, useMemo, useEffect } from 'react'
 import { Posts } from './Posts'
 import { usePagesPostsIndexQuery, usePagesPostsSortMutation } from './index.gen'
@@ -8,20 +9,30 @@ import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
 import { Post } from '@/types/graphql.gen'
 
 const PostsPage: NextPage = () => {
+  const router = useRouter()
+  const { query } = router
   const apolloErrorToast = useApolloErrorToast()
-  const [currentPage, setCurrentPage] = useState<number>(1)
+
   const postsPerPage = 12
+
+  // クエリパラメータから状態を初期化
+  const [currentPage, setCurrentPage] = useState<number>(
+    parseInt(query.page as string) || 1,
+  )
+  const [sortBy, setSortBy] = useState<string>(
+    query.sort_by ? (query.sort_by as string) : 'created_at',
+  )
+  const [order, setOrder] = useState<string>(
+    query.order ? (query.order as string) : 'desc',
+  )
+  const [sortedPosts, setSortedPosts] = useState<Post[]>([])
 
   const offset = useMemo(
     () => (currentPage - 1) * postsPerPage,
     [currentPage, postsPerPage],
   )
 
-  // ソート順の管理
-  const [sortBy, setSortBy] = useState<string>('created_at')
-  const [order, setOrder] = useState<string>('desc')
-  const [sortedPosts, setSortedPosts] = useState<Post[]>([])
-
+  // 初期データ取得クエリ
   const { data: indexData, loading: indexLoading } = usePagesPostsIndexQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -33,6 +44,7 @@ const PostsPage: NextPage = () => {
     },
   })
 
+  // ソート用ミューテーション
   const [postSort, { loading: sortLoading }] = usePagesPostsSortMutation({
     onCompleted: (data) => {
       setSortedPosts(data.postSort?.posts || [])
@@ -40,20 +52,17 @@ const PostsPage: NextPage = () => {
     onError: apolloErrorToast,
   })
 
+  // クエリパラメータに基づいてソートとページングを実行
   useEffect(() => {
     postSort({
       variables: {
-        sortBy: sortBy,
-        order: order,
+        sortBy,
+        order,
         limit: postsPerPage,
-        offset: offset,
+        offset,
       },
     })
-  }, [sortBy, order, postSort, postsPerPage, offset])
-
-  if (!indexData) {
-    return <Loading />
-  }
+  }, [sortBy, order, currentPage, offset, postSort, postsPerPage])
 
   // データ取得中にスピナーを表示
   if (indexLoading || sortLoading) {
@@ -68,6 +77,10 @@ const PostsPage: NextPage = () => {
         />
       </Center>
     )
+  }
+
+  if (!indexData) {
+    return <Loading />
   }
 
   return (

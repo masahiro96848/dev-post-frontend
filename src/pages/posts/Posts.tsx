@@ -9,6 +9,7 @@ import {
   MenuList,
   Button,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React, { FC, useEffect, useState, useMemo, useCallback } from 'react'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
@@ -40,8 +41,10 @@ export const Posts: FC<Props> = (props: Props) => {
     setSortBy,
     setOrder,
   } = props
+  const router = useRouter()
   const [isMobile, setIsMobile] = useState<boolean>(false)
   const [isTablet, setIsTablet] = useState<boolean>(false)
+  const [selectedSort, setSelectedSort] = useState<string>('更新日順')
 
   const totalPages = useMemo(
     () => Math.ceil(totalPosts / postsPerPage),
@@ -60,20 +63,55 @@ export const Posts: FC<Props> = (props: Props) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // ページ読み込み時にクエリパラメータからソートオプションを復元
+  useEffect(() => {
+    if (router.query.sort_by) {
+      setSortBy(router.query.sort_by as string)
+      setSelectedSort(
+        router.query.sort_by === 'favorites_count'
+          ? 'スターの多い順'
+          : '更新日順',
+      )
+    }
+    if (router.query.order) {
+      setOrder(router.query.order as string)
+    }
+    if (router.query.page) {
+      setCurrentPage(parseInt(router.query.page as string) || 1)
+    }
+  }, [router.query.sort_by, router.query.order, router.query.page])
+
   const handlePageChange = useCallback(
     (page: number) => {
       setCurrentPage(page)
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, page: String(page) },
+        },
+        undefined,
+        { shallow: true },
+      )
     },
-    [setCurrentPage],
+    [setCurrentPage, router],
   )
 
   const handleSortChange = useCallback(
-    (sort_by: string, order: string) => {
+    (sort_by: string, order: string, label: string) => {
       setSortBy(sort_by)
       setOrder(order)
-      setCurrentPage(1) // ソートを変更したらページをリセット
+      setSelectedSort(label)
+      setCurrentPage(1)
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { sort_by, order, page: '1' },
+        },
+        undefined,
+        { shallow: true },
+      )
     },
-    [setSortBy, setOrder, setCurrentPage],
+    [setSortBy, setOrder, setCurrentPage, router],
   )
 
   return (
@@ -96,16 +134,24 @@ export const Posts: FC<Props> = (props: Props) => {
                   color="white"
                   _hover={{ backgroundColor: 'blue.600' }}
                 >
-                  更新日順
+                  {selectedSort}
                 </MenuButton>
                 <MenuList>
                   <MenuItem
-                    onClick={() => handleSortChange('created_at', 'desc')}
+                    onClick={() =>
+                      handleSortChange('created_at', 'desc', '更新日順')
+                    }
                   >
                     更新日順
                   </MenuItem>
                   <MenuItem
-                    onClick={() => handleSortChange('favorites_count', 'desc')}
+                    onClick={() =>
+                      handleSortChange(
+                        'favorites_count',
+                        'desc',
+                        'スターの多い順',
+                      )
+                    }
                   >
                     スターの多い順
                   </MenuItem>
@@ -158,16 +204,24 @@ export const Posts: FC<Props> = (props: Props) => {
                   color="white"
                   _hover={{ backgroundColor: 'blue.600' }}
                 >
-                  更新日順
+                  {selectedSort}
                 </MenuButton>
                 <MenuList>
                   <MenuItem
-                    onClick={() => handleSortChange('created_at', 'desc')}
+                    onClick={() =>
+                      handleSortChange('created_at', 'desc', '更新日順')
+                    }
                   >
                     更新日順
                   </MenuItem>
                   <MenuItem
-                    onClick={() => handleSortChange('favorites_count', 'desc')}
+                    onClick={() =>
+                      handleSortChange(
+                        'favorites_count',
+                        'desc',
+                        'スターの多い順',
+                      )
+                    }
                   >
                     スターの多い順
                   </MenuItem>
@@ -184,7 +238,7 @@ export const Posts: FC<Props> = (props: Props) => {
               <Flex
                 wrap="wrap"
                 gap={{ base: '8px', md: '8px' }}
-                justifyContent="flex-start" // 常に左揃え
+                justifyContent="flex-start"
               >
                 {posts.map((post, index) => (
                   <MemoizedPostCard key={index} post={post} />
