@@ -1,21 +1,14 @@
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import {
   Box,
-  Image,
   Container,
   Heading,
-  Text,
   Flex,
   Button,
-  Icon,
-  Card,
-  CardBody,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Stack,
   Tabs,
   TabList,
   TabPanels,
@@ -23,15 +16,13 @@ import {
   TabPanel,
 } from '@chakra-ui/react'
 import React, { FC, useEffect, useState } from 'react'
-import { FaStar } from 'react-icons/fa'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { Sidebar } from '@/components/navigation/Sidebar'
-import { postStatus, PostStatusKey, imageOrigin } from '@/constants/post'
+import { MemoizedMyPostCard } from '@/components/ui/myPost/Card'
 import { Post, User } from '@/types/graphql.gen'
-import { formatDate } from '@/utils/date'
 
 type Props = {
   viewer: User
@@ -56,7 +47,7 @@ export const Dashboard: FC<Props> = (props: Props) => {
       <Header viewer={viewer} />
       <Box>
         {isMobile ? (
-          <Box p="24px">
+          <Box>
             <Tabs>
               <TabList>
                 <Tab>投稿記事一覧</Tab>
@@ -93,83 +84,11 @@ export const Dashboard: FC<Props> = (props: Props) => {
                   <Box>
                     <Flex wrap="wrap" justifyContent="center">
                       {myPosts.map((post, index) => (
-                        <Link key={index} textDecoration="none" mb={4}>
-                          <Card
-                            width="320px"
-                            maxWidth="100%"
-                            border="1px solid"
-                            borderColor="gray.200"
-                            borderRadius="md"
-                            height="80px"
-                            display="flex"
-                            alignItems="center"
-                          >
-                            <CardBody p="0" display="flex" alignItems="center">
-                              <Image
-                                src={
-                                  post.imageUrl
-                                    ? imageOrigin + post.imageUrl
-                                    : undefined
-                                }
-                                alt={post.title}
-                                width="80px"
-                                height="80px"
-                                borderRadius="md"
-                              />
-                              <Stack
-                                spacing="3"
-                                pl="4"
-                                pr="4"
-                                height="100%"
-                                justifyContent="center"
-                              >
-                                <Heading size="sm" noOfLines={1}>
-                                  {post.title.length > 30
-                                    ? `${post.title.slice(0, 30)}...`
-                                    : post.title}
-                                </Heading>
-                                <Text
-                                  fontSize="sm"
-                                  color={
-                                    post.isPublished === 1
-                                      ? 'blue.500'
-                                      : 'gray.500'
-                                  }
-                                  border="1px solid"
-                                  borderColor={
-                                    post.isPublished === 1
-                                      ? 'blue.500'
-                                      : 'gray.500'
-                                  }
-                                  px="2"
-                                  py="1"
-                                  borderRadius="md"
-                                  width="fit-content"
-                                  display="inline-block"
-                                >
-                                  {
-                                    postStatus[
-                                      post.isPublished as PostStatusKey
-                                    ]
-                                  }
-                                </Text>
-                              </Stack>
-                              <Flex
-                                justify="flex-end"
-                                align="center"
-                                ml="auto"
-                                pr="4"
-                              >
-                                <Icon
-                                  boxSize={4}
-                                  as={FaStar}
-                                  color="yellow.400"
-                                />
-                                <Text ml="2">{post.favoritesCount}</Text>
-                              </Flex>
-                            </CardBody>
-                          </Card>
-                        </Link>
+                        <MemoizedMyPostCard
+                          key={index}
+                          myPost={post}
+                          isMobile={isMobile}
+                        />
                       ))}
                     </Flex>
                   </Box>
@@ -234,95 +153,11 @@ export const Dashboard: FC<Props> = (props: Props) => {
                         justifyContent="flex-start"
                       >
                         {myPosts.map((post, index) => (
-                          <Link key={index} textDecoration="none">
-                            <Card
-                              width={{ base: '100%', md: '300px' }}
-                              maxW="100%"
-                              border="1px solid"
-                              borderColor="gray.200"
-                              borderRadius="md"
-                              height="400px"
-                              display="flex"
-                              flexDirection="column"
-                              justifyContent="space-between"
-                              mx={{ base: 0, md: '8px' }}
-                              mb={{ base: '8px', md: '8px' }}
-                            >
-                              <CardBody
-                                p="0"
-                                display="flex"
-                                flexDirection="column"
-                                justifyContent="space-between"
-                              >
-                                <Box>
-                                  <Image
-                                    src={
-                                      post.imageUrl
-                                        ? imageOrigin + post.imageUrl
-                                        : undefined
-                                    }
-                                    alt={post.title}
-                                    width="100%"
-                                    height="200px"
-                                    objectFit="cover"
-                                    borderTopRadius="md"
-                                  />
-                                  <Stack mt="2" spacing="3" p="4">
-                                    <Text
-                                      fontSize="sm"
-                                      color={
-                                        post.isPublished === 1
-                                          ? 'blue.500'
-                                          : 'gray.500'
-                                      }
-                                      border="1px solid"
-                                      borderColor={
-                                        post.isPublished === 1
-                                          ? 'blue.500'
-                                          : 'gray.500'
-                                      }
-                                      px="2"
-                                      py="1"
-                                      borderRadius="md"
-                                      width="fit-content"
-                                      display="inline-block"
-                                    >
-                                      {
-                                        postStatus[
-                                          (post.isPublished ??
-                                            0) as PostStatusKey
-                                        ]
-                                      }
-                                    </Text>
-                                    <Heading size="md">
-                                      {post.title.length > 30
-                                        ? `${post.title.slice(0, 30)}...`
-                                        : post.title}
-                                    </Heading>
-                                  </Stack>
-                                </Box>
-                                <Flex
-                                  justify="space-between"
-                                  alignItems="center"
-                                  px={4}
-                                  py={2}
-                                  mt="auto"
-                                >
-                                  <Text fontSize="sm" color="gray.600">
-                                    {formatDate(post.createdAt)}
-                                  </Text>
-                                  <Flex justify="flex-end" align="center">
-                                    <Icon
-                                      boxSize={8}
-                                      as={FaStar}
-                                      color="yellow.400"
-                                    />
-                                    <Text ml="2"> {post.favoritesCount}</Text>
-                                  </Flex>
-                                </Flex>
-                              </CardBody>
-                            </Card>
-                          </Link>
+                          <MemoizedMyPostCard
+                            key={index}
+                            myPost={post}
+                            isMobile={isMobile}
+                          />
                         ))}
                       </Flex>
                     </Box>
