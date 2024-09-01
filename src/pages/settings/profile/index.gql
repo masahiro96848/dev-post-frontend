@@ -1,0 +1,16 @@
+query Pages_Profile_Edit_Index {
+  viewer {
+    name
+  }
+}
+
+mutation Pages_Profile_Edit($input: ProfileEditInput!) {
+  profileEdit(input: $input) {
+    user {
+      name
+      bio
+      imageUrl
+    }
+    errors
+  }
+}

@@ -55,4 +55,5 @@ export const profileSchema = z.object({
     .string()
     .max(100, { message: '自己紹介文は100文字以内で入力してください' })
     .optional(),
+  imageUrl: z.string().optional(),
 })

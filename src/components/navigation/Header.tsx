@@ -48,7 +48,7 @@ export const Header: FC<Props> = (props: Props) => {
               新規投稿
             </Link>
             <Text color="white" fontSize="lg" mr={4}>
-              {viewer.name}
+              <Link href={`/settings/profile`}>{viewer.name}</Link>
             </Text>
 
             <Button
