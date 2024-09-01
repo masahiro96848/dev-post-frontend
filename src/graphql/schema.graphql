@@ -4,6 +4,8 @@ type User {
   id: ID
   email: String
   name: String
+  bio: String
+  imageUrl: String
   created_at: Date
   updated_at: Date
 }
@@ -76,6 +78,12 @@ input PostSortInput {
   offset: Int
 }
 
+input ProfileEditInput {
+  name: String!
+  bio: String
+  imageUrl: String
+}
+
 type Mutation {
   signin(input: SigninInput!): SigninPayload
   signup(input: SignupInput!): SignupPayload
@@ -84,6 +92,7 @@ type Mutation {
   addFavorite(input: AddFavoriteInput!): AddFavoritePayload!
   removeFavorite(input: RemoveFavoriteInput!): RemoveFavoritePayload!
   postSort(input: PostSortInput!): PostSortPayload!
+  profileEdit(input: ProfileEditInput!): ProfileEditPayload!
 }
 
 type SigninPayload {
@@ -115,4 +124,9 @@ type RemoveFavoritePayload {
 
 type PostSortPayload {
   posts: [Post!]!
+}
+
+type ProfileEditPayload {
+  user: User
+  errors: [String!]
 }
