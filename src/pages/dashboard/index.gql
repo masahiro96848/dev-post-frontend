@@ -1,8 +1,8 @@
-query Pages_Dashboard_Index {
+query Pages_Dashboard_Index($limit: Int, $offset: Int) {
   viewer {
     ...Pages_Dashboard_User
   }
-  myPosts {
+  myposts(limit: $limit, offset: $offset) {
     ...Pages_Dashboard_Post
   }
 }
@@ -24,4 +24,20 @@ fragment Pages_Dashboard_Post on Post {
     name
   }
   createdAt
+  updatedAt
+}
+
+mutation Pages_Dashboard_myposts_Sort(
+  $sortBy: String!
+  $order: String!
+  $limit: Int
+  $offset: Int
+) {
+  mypostSort(
+    input: { sortBy: $sortBy, order: $order, limit: $limit, offset: $offset }
+  ) {
+    myposts {
+      ...Pages_Posts_Post
+    }
+  }
 }
