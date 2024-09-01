@@ -50,6 +50,9 @@ export const Header: FC<Props> = (props: Props) => {
             <Text color="white" fontSize="lg" mr={4}>
               <Link href={`/settings/profile`}>{viewer.name}</Link>
             </Text>
+            <Text color="white" fontSize="lg" mr={4}>
+              <Link href={`/dashboard`}>ダッシュボード</Link>
+            </Text>
 
             <Button
               onClick={() => {
