@@ -35,7 +35,7 @@ type Query {
   viewer: User!
   posts(limit: Int, offset: Int): [Post!]!
   postDetail(uid: String!, name: String!): Post!
-  myPosts: [Post!]!
+  myposts(limit: Int, offset: Int): [Post!]!
   favorites: [Favorite!]!
   totalPosts: Int!
 }
@@ -78,6 +78,13 @@ input PostSortInput {
   offset: Int
 }
 
+input mypostSortInput {
+  sortBy: String!
+  order: String!
+  limit: Int
+  offset: Int
+}
+
 input ProfileEditInput {
   name: String!
   bio: String
@@ -92,6 +99,7 @@ type Mutation {
   addFavorite(input: AddFavoriteInput!): AddFavoritePayload!
   removeFavorite(input: RemoveFavoriteInput!): RemoveFavoritePayload!
   postSort(input: PostSortInput!): PostSortPayload!
+  mypostSort(input: mypostSortInput!): mypostSortPayload!
   profileEdit(input: ProfileEditInput!): ProfileEditPayload!
 }
 
@@ -124,6 +132,10 @@ type RemoveFavoritePayload {
 
 type PostSortPayload {
   posts: [Post!]!
+}
+
+type mypostSortPayload {
+  myposts: [Post!]!
 }
 
 type ProfileEditPayload {
