@@ -26,7 +26,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, isMobile }) => {
       <Link href={`${post.user.name}/posts/${post.uid}`} textDecoration="none">
         <Card
           width={isMobile ? '100%' : { base: '100%', md: '300px' }} // スマホで100%幅
-          height={isMobile ? '110px' : '400px'} // スマホで高さ自動調整
+          height={isMobile ? '120px' : '400px'} // スマホで高さ自動調整
           maxW="100%"
           border="1px solid"
           borderColor="gray.200"
@@ -76,11 +76,35 @@ const PostCard: React.FC<PostCardProps> = ({ post, isMobile }) => {
                 {new Date(post.createdAt).toLocaleDateString()}
               </Text>
             </Stack>
-            <Flex justify="flex-end" align="center">
-              <Icon boxSize={isMobile ? 6 : 6} as={FaStar} color="yellow.400" />
-              <Text ml="2" fontSize={isMobile ? 'xs' : 'sm'}>
-                {post.favoritesCount}
-              </Text>
+            <Flex justify="space-between" alignItems="center" width="100%">
+              <Flex align="center">
+                <Image
+                  src={
+                    post.user.imageUrl
+                      ? imageOrigin + post.user.imageUrl
+                      : undefined
+                  }
+                  alt="profile_image"
+                  width={isMobile ? '30px' : '50px'}
+                  height={isMobile ? '30px' : '50px'}
+                  borderRadius="full"
+                  objectFit="cover"
+                  loading="lazy"
+                />
+                <Text fontSize="12px" ml={2}>
+                  {post.user.name}
+                </Text>
+              </Flex>
+              <Flex align="center">
+                <Icon
+                  boxSize={isMobile ? 6 : 6}
+                  as={FaStar}
+                  color="yellow.400"
+                />
+                <Text ml="2" fontSize={isMobile ? 'xs' : 'sm'}>
+                  {post.favoritesCount}
+                </Text>
+              </Flex>
             </Flex>
           </CardBody>
         </Card>

@@ -22,6 +22,7 @@ fragment Pages_Posts_Post on Post {
   favoritesCount
   user {
     name
+    imageUrl
   }
   createdAt
   updatedAt
