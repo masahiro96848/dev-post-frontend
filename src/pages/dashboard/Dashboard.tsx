@@ -16,7 +16,6 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
-import { Sidebar } from '@/components/navigation/Sidebar'
 import { Pagination } from '@/components/ui/Pagination'
 import { MemoizedMyPostCard } from '@/components/ui/myPost/Card'
 import { Post, User } from '@/types/graphql.gen'
@@ -197,8 +196,6 @@ export const Dashboard: FC<Props> = (props: Props) => {
             <Flex justifyContent="center">
               <Container maxWidth="1400px" bg="white" boxShadow="md" p={12}>
                 <Flex>
-                  <Sidebar />
-
                   <Box p="24px">
                     <Box
                       width="100%"
