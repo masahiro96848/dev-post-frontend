@@ -1,6 +1,7 @@
 query Pages_Post_Edit_Index {
   viewer {
     name
+    imageUrl
   }
 }
 

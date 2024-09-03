@@ -9,8 +9,8 @@ query Pages_Dashboard_Index($limit: Int, $offset: Int) {
 
 fragment Pages_Dashboard_User on User {
   id
-  email
   name
+  imageUrl
 }
 
 fragment Pages_Dashboard_Post on Post {
