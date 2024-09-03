@@ -23,5 +23,5 @@ fragment Pages_Post_Detail on Post {
 
 fragment Pages_Post_Detail_User on User {
   name
-  email
+  imageUrl
 }

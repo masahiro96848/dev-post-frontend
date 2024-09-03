@@ -1,6 +1,7 @@
 query Pages_Profile_Edit_Index {
   viewer {
     name
+    imageUrl
   }
 }
 
