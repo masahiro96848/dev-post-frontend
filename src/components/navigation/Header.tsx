@@ -1,4 +1,3 @@
-import { HamburgerIcon } from '@chakra-ui/icons'
 import {
   Box,
   Flex,
@@ -10,12 +9,10 @@ import {
   MenuList,
   MenuDivider,
   MenuGroup,
-  IconButton,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { CgProfile } from 'react-icons/cg'
-import { FaListAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa'
 import { MdSpaceDashboard } from 'react-icons/md'
 import { v4 as uuidv4 } from 'uuid'
 import { imageOrigin } from '@/constants/post'
@@ -27,6 +24,7 @@ type Props = {
 
 export const Header: FC<Props> = (props: Props) => {
   const { viewer } = props
+
   const router = useRouter()
   const uid = uuidv4()
 
@@ -107,35 +105,15 @@ export const Header: FC<Props> = (props: Props) => {
         </Box>
       ) : (
         <Box>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Options"
-              icon={<HamburgerIcon />}
-              variant="outline"
-              size="lg"
-            />
-            <MenuList>
-              <MenuItem
-                icon={<FaListAlt />}
-                onClick={() => router.push('/posts')}
-              >
-                記事一覧
-              </MenuItem>
-              <MenuItem
-                icon={<FaSignInAlt />}
-                onClick={() => router.push('/signin')}
-              >
-                ログイン
-              </MenuItem>
-              <MenuItem
-                icon={<FaUserPlus />}
-                onClick={() => router.push('/signup')}
-              >
-                新規登録
-              </MenuItem>
-            </MenuList>
-          </Menu>
+          <Link href="/posts" color="white" fontSize="lg" mr={4}>
+            記事一覧
+          </Link>
+          <Link href="/signin" color="white" fontSize="lg" mr={4}>
+            ログイン
+          </Link>
+          <Link href="/signup" color="white" fontSize="lg">
+            新規登録
+          </Link>
         </Box>
       )}
     </Box>
