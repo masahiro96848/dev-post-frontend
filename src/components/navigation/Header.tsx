@@ -1,17 +1,22 @@
+import { HamburgerIcon } from '@chakra-ui/icons'
 import {
   Box,
   Flex,
   Link,
-  Text,
   Image,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Divider,
+  MenuDivider,
+  MenuGroup,
+  IconButton,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { CgProfile } from 'react-icons/cg'
+import { FaListAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa'
+import { MdSpaceDashboard } from 'react-icons/md'
 import { v4 as uuidv4 } from 'uuid'
 import { imageOrigin } from '@/constants/post'
 import { User } from '@/types/graphql.gen'
@@ -24,7 +29,6 @@ export const Header: FC<Props> = (props: Props) => {
   const { viewer } = props
   const router = useRouter()
   const uid = uuidv4()
-  console.log(viewer)
 
   return (
     <Box
@@ -74,30 +78,25 @@ export const Header: FC<Props> = (props: Props) => {
                 />
               </MenuButton>
               <MenuList>
-                <Text px={4} py={2} fontSize="sm">
-                  {viewer.name}
-                </Text>
-                <Divider />
+                <MenuGroup title={viewer.name ?? undefined} fontWeight="normal">
+                  <MenuItem
+                    fontWeight="bold"
+                    onClick={() => router.push('/dashboard')}
+                    icon={<MdSpaceDashboard size="1.5rem" />}
+                  >
+                    ダッシュボード
+                  </MenuItem>
+                  <MenuItem
+                    fontWeight="bold"
+                    onClick={() => router.push('/settings/profile')}
+                    icon={<CgProfile size="1.5rem" />}
+                  >
+                    プロフィール編集
+                  </MenuItem>
+                </MenuGroup>
+                <MenuDivider />
                 <MenuItem
                   fontWeight="bold"
-                  py={2}
-                  px={4}
-                  onClick={() => router.push('/dashboard')}
-                >
-                  ダッシュボード
-                </MenuItem>
-                <MenuItem
-                  fontWeight="bold"
-                  py={2}
-                  px={4}
-                  onClick={() => router.push('/settings/profile')}
-                >
-                  プロフィール編集
-                </MenuItem>
-                <MenuItem
-                  fontWeight="bold"
-                  py={2}
-                  px={4}
                   onClick={() => router.push('/signout')}
                 >
                   ログアウト
@@ -108,15 +107,35 @@ export const Header: FC<Props> = (props: Props) => {
         </Box>
       ) : (
         <Box>
-          <Link href="/posts" color="white" fontSize="lg" mr={4}>
-            記事一覧
-          </Link>
-          <Link href="/signin" color="white" fontSize="lg" mr={4}>
-            ログイン
-          </Link>
-          <Link href="/signup" color="white" fontSize="lg">
-            新規登録
-          </Link>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="outline"
+              size="lg"
+            />
+            <MenuList>
+              <MenuItem
+                icon={<FaListAlt />}
+                onClick={() => router.push('/posts')}
+              >
+                記事一覧
+              </MenuItem>
+              <MenuItem
+                icon={<FaSignInAlt />}
+                onClick={() => router.push('/signin')}
+              >
+                ログイン
+              </MenuItem>
+              <MenuItem
+                icon={<FaUserPlus />}
+                onClick={() => router.push('/signup')}
+              >
+                新規登録
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Box>
       )}
     </Box>
