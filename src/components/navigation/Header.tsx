@@ -13,6 +13,8 @@ import {
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { CgProfile } from 'react-icons/cg'
+import { FaListAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa'
+import { IoMenu } from 'react-icons/io5'
 import { MdSpaceDashboard } from 'react-icons/md'
 import { v4 as uuidv4 } from 'uuid'
 import { imageOrigin } from '@/constants/post'
@@ -24,7 +26,6 @@ type Props = {
 
 export const Header: FC<Props> = (props: Props) => {
   const { viewer } = props
-
   const router = useRouter()
   const uid = uuidv4()
 
@@ -105,15 +106,31 @@ export const Header: FC<Props> = (props: Props) => {
         </Box>
       ) : (
         <Box>
-          <Link href="/posts" color="white" fontSize="lg" mr={4}>
-            記事一覧
-          </Link>
-          <Link href="/signin" color="white" fontSize="lg" mr={4}>
-            ログイン
-          </Link>
-          <Link href="/signup" color="white" fontSize="lg">
-            新規登録
-          </Link>
+          <Menu>
+            <MenuButton>
+              <IoMenu size="3rem" />
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                icon={<FaListAlt />}
+                onClick={() => router.push('/posts')}
+              >
+                記事一覧
+              </MenuItem>
+              <MenuItem
+                icon={<FaSignInAlt />}
+                onClick={() => router.push('/signin')}
+              >
+                ログイン
+              </MenuItem>
+              <MenuItem
+                icon={<FaUserPlus />}
+                onClick={() => router.push('/signup')}
+              >
+                新規登録
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Box>
       )}
     </Box>

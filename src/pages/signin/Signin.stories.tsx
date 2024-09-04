@@ -53,7 +53,7 @@ export const InputFilled: Story = {
       await userEvent.type(canvas.getByLabelText('パスワード'), 'password')
     })
     await step('Submit form', async () => {
-      await userEvent.click(canvas.getByRole('button'))
+      await userEvent.click(canvas.getByRole('button', { name: 'ログイン' }))
     })
 
     await waitFor(() => expect(args.onSubmit).toHaveBeenCalled())
