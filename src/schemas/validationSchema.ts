@@ -20,11 +20,11 @@ export const signupSchema = z
     password: z
       .string()
       .min(1, { message: '必須項目です' })
-      .min(6, { message: 'パスワードは6文字以上が必要です' }),
+      .min(6, { message: 'パスワードは6文字以上必要です（パスワード)' }),
     passwordConfirmation: z
       .string()
       .min(1, { message: '必須項目です' })
-      .min(6, { message: 'パスワードは6文字以上が必要です' }),
+      .min(6, { message: 'パスワードは6文字以上必要です（確認用）' }),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.passwordConfirmation) {
