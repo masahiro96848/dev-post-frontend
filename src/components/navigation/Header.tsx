@@ -9,6 +9,7 @@ import {
   MenuList,
   MenuDivider,
   MenuGroup,
+  Button,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
@@ -52,17 +53,25 @@ export const Header: FC<Props> = (props: Props) => {
       {viewer ? (
         <Box>
           <Flex alignItems="center">
-            <Link href="/posts" color="white" fontSize="lg" mr={4}>
-              記事一覧
-            </Link>
-            <Link
+            <Button
+              as={Link}
               href={`/posts/${uid}/edit`}
-              color="white"
+              bg="white"
+              borderRadius="full"
+              color="orange.400"
               fontSize="lg"
+              p={6}
               mr={4}
+              _hover={{
+                bg: 'gray.400',
+                color: 'white',
+                transition: 'all 0.5s',
+                textDecoration: 'none',
+              }}
             >
               新規投稿
-            </Link>
+            </Button>
+
             <Menu>
               <MenuButton>
                 <Image
