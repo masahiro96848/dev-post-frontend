@@ -12,7 +12,7 @@ import { FaStar } from 'react-icons/fa'
 import {
   usePagesPostDetailAddFavoriteMutation,
   usePagesPostDetailRemoveFavoriteMutation,
-} from './Detail.gen'
+} from './DetailPost.gen'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
@@ -26,7 +26,7 @@ type Props = {
   viewer?: User | null
   post: Post
 }
-export const Detail: FC<Props> = (props: Props) => {
+export const PostDetail: FC<Props> = (props: Props) => {
   const { viewer, post } = props
   const [isMobile, setIsMobile] = useState(false)
   const [favorited, setFavorited] = useState<boolean>(post.favorited || false)

@@ -1,6 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next'
 import React from 'react'
-import { Detail } from './Detail'
+import { PostDetail } from './PostDetail'
 import { usePagesPostDetailIndexQuery } from './index.gen'
 import { Loading } from '@/toastModal/Loading'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
@@ -27,7 +27,7 @@ const Page: NextPage<PageProps> = (props: PageProps) => {
   if (!data?.postDetail) {
     return <Loading />
   }
-  return <Detail viewer={data.viewer} post={data.postDetail} />
+  return <PostDetail viewer={data.viewer} post={data.postDetail} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
