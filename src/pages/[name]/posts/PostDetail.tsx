@@ -12,7 +12,7 @@ import { FaStar } from 'react-icons/fa'
 import {
   usePagesPostDetailAddFavoriteMutation,
   usePagesPostDetailRemoveFavoriteMutation,
-} from './DetailPost.gen'
+} from './PostDetail.gen'
 import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'

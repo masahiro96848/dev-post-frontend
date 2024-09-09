@@ -46,8 +46,6 @@ export const Posts: FC<Props> = (props: Props) => {
   const [isTablet, setIsTablet] = useState<boolean>(false)
   const [selectedSort, setSelectedSort] = useState<string>('更新日順')
 
-  console.log(posts)
-
   const totalPages = useMemo(
     () => Math.ceil(totalPosts / postsPerPage),
     [totalPosts, postsPerPage],
