@@ -53,7 +53,7 @@ export const Signin: FC<{ onSubmit: (values: FormValues) => void }> = ({
           borderColor="#850b0bf"
         >
           <VStack>
-            <Heading fontSize="lg">ログイン</Heading>
+            <Heading size="lg">ログイン</Heading>
           </VStack>
           <form onSubmit={handleSubmit((v) => onSubmit(v))}>
             <Stack spacing={4} mt="64px">
@@ -93,14 +93,12 @@ export const Signin: FC<{ onSubmit: (values: FormValues) => void }> = ({
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isValid ? 'yellow.200' : 'gray.300'}
                   width="100%"
                   size="lg"
                   fontWeight="bold"
                   type="submit"
                   px={4}
                   py={8}
-                  _hover={{ bg: isValid ? 'yellow.300' : 'gray.300' }}
                   isDisabled={!isValid}
                 >
                   ログイン

@@ -183,4 +183,60 @@ export const themeSetting: Theme = extendTheme({
     80: '20rem',
     96: '24rem',
   },
+  components: {
+    Button: {
+      sizes: {
+        sm: {
+          fontSize: 'sm',
+          height: '32px',
+          borderRadius: '4px',
+        },
+        md: {
+          fontSize: 'md',
+          height: '40px',
+          borderRadius: '4px',
+        },
+        lg: {
+          fontSize: 'lg',
+          height: '48px',
+          borderRadius: '8px',
+        },
+      },
+      variants: {
+        solid: {
+          _hover: {
+            backgroundColor: 'blue.600',
+            _disabled: {
+              backgroundColor: 'blue.600',
+              color: 'white',
+            },
+          },
+          _focus: {
+            boxShadow: 'none',
+            outline: '2px solid #F7FAFC',
+            outlineOffset: '2px',
+          },
+          _disabled: {
+            backgroundColor: 'blue.600',
+          },
+        },
+        outline: {
+          _hover: {
+            backgroundColor: 'gray.50',
+          },
+          _focus: {
+            boxShadow: 'none',
+            outline: '2px solid #F7FAFC',
+            outlineOffset: '2px',
+          },
+          _disabled: {
+            backgroundColor: 'gray.50',
+          },
+        },
+      },
+      defaultProps: {
+        colorScheme: 'facebook',
+      },
+    },
+  },
 })

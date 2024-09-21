@@ -117,14 +117,12 @@ export const Signup: FC<{ onSubmit: (values: FormValues) => void }> = ({
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isValid ? 'yellow.200' : 'gray.300'}
                   width="100%"
                   size="lg"
                   fontWeight="bold"
                   type="submit"
                   px={4}
                   py={8}
-                  _hover={{ bg: isValid ? 'yellow.300' : 'gray.300' }}
                   isDisabled={!isValid}
                 >
                   新規登録
