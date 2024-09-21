@@ -205,7 +205,7 @@ export const PostEdit: FC<{
 
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isPublished === 1 ? 'gray.300' : 'black'}
+                  bg={isPublished === 1 ? 'gray.300' : 'blue.600'}
                   color={isPublished === 1 ? 'black' : 'white'}
                   width="100%"
                   mx="auto"
@@ -215,7 +215,7 @@ export const PostEdit: FC<{
                   px={4}
                   py={8}
                   _hover={{
-                    bg: isPublished === 1 ? 'gray.400' : 'black',
+                    bg: isPublished === 1 ? 'gray.300' : 'blue.500',
                   }}
                   isDisabled={!isValid}
                 >
@@ -343,7 +343,7 @@ export const PostEdit: FC<{
               </Flex>
               <Stack spacing={10} mt={12}>
                 <Button
-                  bg={isPublished === 1 ? 'gray.300' : 'black'}
+                  bg={isPublished === 1 ? 'gray.300' : 'blue.600'}
                   color={isPublished === 1 ? 'black' : 'white'}
                   width="50%"
                   mx="auto"
@@ -353,7 +353,7 @@ export const PostEdit: FC<{
                   px={4}
                   py={8}
                   _hover={{
-                    bg: isPublished === 1 ? 'gray.400' : 'black',
+                    bg: isPublished === 1 ? 'gray.300' : 'blue.500',
                   }}
                   isDisabled={!isValid}
                 >
