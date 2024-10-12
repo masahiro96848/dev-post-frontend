@@ -19,6 +19,7 @@ import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
 import { imageOrigin } from '@/constants/post'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
+import { useModalToast } from '@/toastModal/useModalToast'
 import { Post, User } from '@/types/graphql.gen'
 import { formatDate } from '@/utils/date'
 
@@ -34,6 +35,7 @@ export const PostDetail: FC<Props> = (props: Props) => {
     post.favoritesCount,
   )
 
+  const { showToastError } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
   const [addFavorite] = usePagesPostDetailAddFavoriteMutation({
@@ -48,6 +50,10 @@ export const PostDetail: FC<Props> = (props: Props) => {
 
   const handleFavoriteToggle = async (postId: string, isFavorited: boolean) => {
     try {
+      if (!viewer) {
+        showToastError('ログインしてください')
+        return
+      }
       if (isFavorited) {
         setFavorited(false)
         setFavoritesCount((prev) => prev - 1)
