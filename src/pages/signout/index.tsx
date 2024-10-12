@@ -3,11 +3,11 @@ import React, { FC, useEffect, useRef } from 'react'
 import { usePagesSignoutMutation } from './index.gen'
 import { Loading } from '@/toastModal/Loading'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
-import { useSuccessToast } from '@/toastModal/useSuccessToast'
+import { useModalToast } from '@/toastModal/useModalToast'
 
 const SignoutPage: FC = () => {
   const router = useRouter()
-  const { showToastSuccess } = useSuccessToast()
+  const { showToastSuccess } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
   const submitted = useRef<boolean>()

@@ -3,11 +3,11 @@ import React from 'react'
 import { Signin } from './Signin'
 import { usePagesSigninMutation } from './index.gen'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
-import { useSuccessToast } from '@/toastModal/useSuccessToast'
+import { useModalToast } from '@/toastModal/useModalToast'
 
 const SigninPage = () => {
   const router = useRouter()
-  const { showToastSuccess } = useSuccessToast()
+  const { showToastSuccess } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
   const [signin] = usePagesSigninMutation({

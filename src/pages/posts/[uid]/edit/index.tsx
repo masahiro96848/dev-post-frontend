@@ -7,13 +7,13 @@ import {
 } from './index.gen'
 import { Loading } from '@/toastModal/Loading'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
-import { useSuccessToast } from '@/toastModal/useSuccessToast'
+import { useModalToast } from '@/toastModal/useModalToast'
 
 const Page = () => {
   const router = useRouter()
   const { uid } = router.query
 
-  const { showToastSuccess } = useSuccessToast()
+  const { showToastSuccess } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
   const { data } = usePagesPostEditIndexQuery({

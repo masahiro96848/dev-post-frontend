@@ -4,11 +4,11 @@ import React, { FC } from 'react'
 import { Signup } from './Signup'
 import { usePagesSignupMutation } from './index.gen'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
-import { useSuccessToast } from '@/toastModal/useSuccessToast'
+import { useModalToast } from '@/toastModal/useModalToast'
 
 const SignupPage: FC = () => {
   const router = useRouter()
-  const { showToastSuccess } = useSuccessToast()
+  const { showToastSuccess } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
   const [signup] = usePagesSignupMutation({
