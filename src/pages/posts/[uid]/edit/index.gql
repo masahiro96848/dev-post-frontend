@@ -1,22 +1,22 @@
-query Pages_Post_Edit_Index {
+query Pages_Post_Edit_Index($uid: String!) {
   viewer {
     name
     imageUrl
   }
-  # postEdit(uid: $uid) {
-  #   id
-  #   title
-  #   body
-  #   imageUrl
-  #   isPublished
-  #   uid
-  #   favorited
-  #   favoritesCount
-  #   user {
-  #     name
-  #   }
-  #   createdAt
-  # }
+  postEdit(uid: $uid) {
+    id
+    title
+    body
+    imageUrl
+    isPublished
+    uid
+    favorited
+    favoritesCount
+    user {
+      name
+    }
+    createdAt
+  }
 }
 
 mutation Pages_Post_Edit($input: PostEditInput!) {
