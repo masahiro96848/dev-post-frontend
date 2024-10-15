@@ -6,6 +6,7 @@ import {
   Text,
   Flex,
   Icon,
+  Link,
 } from '@chakra-ui/react'
 import React, { FC, useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
@@ -158,6 +159,26 @@ export const PostDetail: FC<Props> = (props: Props) => {
                 borderRadius="md"
               />
             </Box>
+            {viewer && viewer.id === post.user.id && (
+              <Box mt={4}>
+                <Link
+                  href={`/posts/${post.uid}/edit`}
+                  display="inline-block"
+                  px={4}
+                  py={2}
+                  border="1px solid"
+                  borderColor="blue.500"
+                  borderRadius="4px"
+                  color="blue.500"
+                  _hover={{
+                    backgroundColor: 'blue.50',
+                    textDecoration: 'none',
+                  }}
+                >
+                  編集
+                </Link>
+              </Box>
+            )}
             <Flex justifyContent="space-between" alignItems="center" mt={6}>
               <Text fontSize="sm" color="gray.600">
                 {formatDate(post.createdAt)}

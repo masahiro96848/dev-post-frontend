@@ -3,6 +3,20 @@ query Pages_Post_Edit_Index {
     name
     imageUrl
   }
+  # postEdit(uid: $uid) {
+  #   id
+  #   title
+  #   body
+  #   imageUrl
+  #   isPublished
+  #   uid
+  #   favorited
+  #   favoritesCount
+  #   user {
+  #     name
+  #   }
+  #   createdAt
+  # }
 }
 
 mutation Pages_Post_Edit($input: PostEditInput!) {

@@ -34,7 +34,8 @@ type Favorite {
 type Query {
   viewer: User!
   posts(limit: Int, offset: Int): [Post!]!
-  postDetail(uid: String!, name: String!): Post!
+  postDetail(uid: String! name: String!): Post!
+  postEdit(uid: String!): Post!
   myposts(limit: Int, offset: Int): [Post!]!
   favorites: [Favorite!]!
   totalPosts: Int!
