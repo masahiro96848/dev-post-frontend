@@ -17,6 +17,9 @@ const Page = () => {
   const apolloErrorToast = useApolloErrorToast()
 
   const { data } = usePagesPostEditIndexQuery({
+    variables: {
+      uid: uid as string,
+    },
     fetchPolicy: 'cache-and-network',
     onError(e) {
       apolloErrorToast(e)
@@ -38,6 +41,7 @@ const Page = () => {
   return (
     <PostEdit
       viewer={data.viewer}
+      post={data.postEdit}
       onSubmit={(values) => {
         postEdit({
           variables: {

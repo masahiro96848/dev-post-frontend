@@ -20,8 +20,10 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
+import { imageOrigin } from '@/constants/post'
 import { postsSchema } from '@/schemas/validationSchema'
-import { User } from '@/types/graphql.gen'
+import { Post, User } from '@/types/graphql.gen'
+import { convertImageUrlToBase64 } from '@/utils/blob'
 import { zodResolver } from '@/utils/zodResolver'
 
 type FormValues = {
@@ -33,8 +35,9 @@ type FormValues = {
 
 export const PostEdit: FC<{
   viewer: User
+  post: Post
   onSubmit: (values: FormValues) => void
-}> = ({ viewer, onSubmit }) => {
+}> = ({ viewer, post, onSubmit }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
 
@@ -42,17 +45,16 @@ export const PostEdit: FC<{
     register,
     handleSubmit,
     setValue,
-    trigger,
     watch,
     formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: 'onChange',
     resolver: zodResolver(postsSchema),
     defaultValues: {
-      title: '',
-      body: '',
-      imageUrl: '',
-      isPublished: 0,
+      title: post?.title ?? '',
+      body: post?.body ?? '',
+      imageUrl: post?.imageUrl ?? '',
+      isPublished: post?.isPublished ?? 0,
     },
   })
 
@@ -63,8 +65,10 @@ export const PostEdit: FC<{
       reader.onloadend = async () => {
         const imageUrl = reader.result as string
         setImageSrc(imageUrl)
-        setValue('imageUrl', imageUrl)
-        await trigger('imageUrl') // バリデーションをトリガー
+        setValue('imageUrl', imageUrl, {
+          shouldValidate: true,
+          shouldDirty: true,
+        })
       }
       reader.readAsDataURL(file)
     }
@@ -77,15 +81,31 @@ export const PostEdit: FC<{
   const isPublished = watch('isPublished', 1)
 
   useEffect(() => {
-    setValue('isPublished', isPublished || 1)
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+    const initializeImage = async () => {
+      if (post?.imageUrl && !imageSrc) {
+        try {
+          const base64Image = await convertImageUrlToBase64(
+            imageOrigin + post.imageUrl,
+          )
+          setImageSrc(base64Image as string)
+          setValue('imageUrl', base64Image as string)
+        } catch (error) {
+          console.error('画像のBase64変換エラー:', error)
+        }
+      }
+      setValue('isPublished', isPublished || 1)
+
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768)
+      }
+
+      handleResize() // 初期実行
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
     }
 
-    handleResize() // 初期実行
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [isPublished, setValue])
+    initializeImage()
+  }, [post, isPublished, setValue, imageSrc])
 
   return (
     <PageRoot backgroundColor="gray.50">
@@ -137,6 +157,7 @@ export const PostEdit: FC<{
                     borderRadius="md"
                     cursor="pointer"
                     onClick={triggerFileUpload}
+                    p={4}
                   >
                     {imageSrc ? (
                       <Image
@@ -146,6 +167,7 @@ export const PostEdit: FC<{
                         height="200px"
                         objectFit="cover"
                         borderRadius="md"
+                        mb={2}
                       />
                     ) : (
                       <>
@@ -163,10 +185,8 @@ export const PostEdit: FC<{
                     <Input
                       id="image-upload"
                       type="file"
-                      accept=".png, .jpg"
-                      {...register('imageUrl', {
-                        onChange: handleImageChange,
-                      })}
+                      accept=".png, .jpg, .jpeg"
+                      onChange={handleImageChange}
                       display="none"
                     />
                   </Flex>
@@ -234,7 +254,12 @@ export const PostEdit: FC<{
             border="3px solid white"
             borderColor="#850b0bf"
           >
-            <form onSubmit={handleSubmit((v) => onSubmit(v))}>
+            <form
+              onSubmit={handleSubmit((values) => {
+                console.log('Submitting form with values:', values)
+                onSubmit(values)
+              })}
+            >
               <Flex>
                 <Stack spacing={4} flex="1">
                   <FormControl id="title" isInvalid={!!errors.title}>
@@ -292,6 +317,7 @@ export const PostEdit: FC<{
                           height="200px"
                           objectFit="cover"
                           borderRadius="md"
+                          mb={2}
                         />
                       ) : (
                         <>
@@ -309,10 +335,8 @@ export const PostEdit: FC<{
                       <Input
                         id="image-upload"
                         type="file"
-                        accept=".png, .jpg"
-                        {...register('imageUrl', {
-                          onChange: handleImageChange,
-                        })}
+                        accept=".png, .jpg, .jpeg"
+                        onChange={handleImageChange}
                         display="none"
                       />
                     </Flex>
