@@ -20,8 +20,10 @@ import { PagePadding } from '@/components/layout/PagePadding'
 import { PageRoot } from '@/components/layout/PageRoot'
 import { Footer } from '@/components/navigation/Footer'
 import { Header } from '@/components/navigation/Header'
+import { imageOrigin } from '@/constants/post'
 import { profileSchema } from '@/schemas/validationSchema'
 import { User } from '@/types/graphql.gen'
+import { convertImageUrlToBase64 } from '@/utils/blob'
 import { zodResolver } from '@/utils/zodResolver'
 
 type FormValues = {
@@ -34,7 +36,6 @@ export const Profile: FC<{
   viewer: User
   onSubmit: (values: FormValues) => void
 }> = ({ viewer, onSubmit }) => {
-  const [isMobile, setIsMobile] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const {
     register,
@@ -46,9 +47,8 @@ export const Profile: FC<{
     mode: 'onChange',
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: '',
-      bio: '',
-      imageUrl: '',
+      name: viewer.name ?? '',
+      bio: viewer.bio ?? '',
     },
   })
 
@@ -59,7 +59,10 @@ export const Profile: FC<{
       reader.onloadend = async () => {
         const imageUrl = reader.result as string
         setImageSrc(imageUrl)
-        setValue('imageUrl', imageUrl)
+        setValue('imageUrl', imageUrl, {
+          shouldValidate: true,
+          shouldDirty: true,
+        })
         await trigger('imageUrl') // バリデーションをトリガー
       }
       reader.readAsDataURL(file)
@@ -71,83 +74,94 @@ export const Profile: FC<{
   }
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+    const initializeImage = async () => {
+      if (viewer.imageUrl && !imageSrc) {
+        try {
+          const base64Image = await convertImageUrlToBase64(
+            imageOrigin + viewer.imageUrl,
+          )
+          setImageSrc(base64Image as string)
+          setValue('imageUrl', base64Image as string)
+        } catch (error) {
+          console.error('画像のBase64変換エラー:', error)
+        }
+      }
     }
 
-    handleResize() // 初期実行
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [setValue])
+    initializeImage()
+  }, [viewer, imageSrc, setValue])
 
   return (
     <PageRoot backgroundColor="gray.50">
       <Header viewer={viewer} />
       <Box p={4}>
         <Container
-          maxWidth={isMobile ? '100%' : '800px'}
+          maxW={{ base: '100%', md: '800px' }}
           bg="white"
           boxShadow="md"
-          px={isMobile ? 6 : 12}
-          py={isMobile ? 12 : 12}
+          px={{ base: 6, md: 12 }}
+          py={{ base: 12, md: 12 }}
           mt="48px"
           border="3px solid white"
           borderColor="#850b0bf"
         >
-          <Heading size={isMobile ? 'md' : 'lg'} mb={8}>
+          <Heading size={{ base: 'md', md: 'lg' }} mb={8} textAlign="left">
             プロフィール変更
           </Heading>
-          <form
-            onSubmit={handleSubmit((v) => {
-              console.log(v) // 入力値をコンソールに表示
-              onSubmit(v) // 既存のonSubmit関数を呼び出す
-            })}
-          >
+          <form onSubmit={handleSubmit((v) => onSubmit(v))}>
             <Flex
-              direction={isMobile ? 'column' : 'row'}
-              justifyContent={isMobile ? 'center' : 'space-between'}
-              alignItems="center"
+              direction={{ base: 'column', md: 'row' }}
+              justifyContent={{ base: 'flex-start', md: 'space-between' }}
+              alignItems={{ base: 'stretch', md: 'flex-start' }}
+              gap={{ base: 6, md: 12 }}
             >
-              <Box>
-                <FormControl id="imageUrl" mt="6">
+              <Box flexShrink={0}>
+                <FormControl id="imageUrl" mt={{ base: 0, md: 6 }}>
                   <Flex
                     align="center"
-                    justify="left"
+                    justify="center"
                     direction="column"
                     border="1px dashed gray"
                     borderRadius="md"
                     cursor="pointer"
                     onClick={triggerFileUpload}
+                    width={{ base: '100%', md: '300px' }}
+                    height={{ base: '200px', md: '200px' }}
+                    overflow="hidden"
                   >
                     {imageSrc ? (
                       <Image
                         src={imageSrc}
                         alt="Uploaded image preview"
-                        width="300px"
-                        height="200px"
+                        width="100%"
+                        height="100%"
                         objectFit="cover"
                         borderRadius="md"
                       />
                     ) : (
-                      <>
+                      <Flex
+                        direction="column"
+                        align="center"
+                        justify="center"
+                        height="100%"
+                      >
                         <IconButton
                           icon={<FaRegImage />}
                           aria-label="Upload Image"
                           variant="ghost"
                           fontSize="3xl"
+                          mb={2}
                         />
-                        <Button fontSize="sm" variant="ghost" mt={2}>
+                        <Button fontSize="sm" variant="ghost">
                           画像をアップロード
                         </Button>
-                      </>
+                      </Flex>
                     )}
                     <Input
                       id="image-upload"
                       type="file"
-                      accept=".png, .jpg"
-                      {...register('imageUrl', {
-                        onChange: handleImageChange,
-                      })}
+                      accept=".png, .jpg, .jpeg"
+                      onChange={handleImageChange}
                       display="none"
                     />
                   </Flex>
@@ -159,7 +173,7 @@ export const Profile: FC<{
                   id="name"
                   isInvalid={!!errors.name}
                   mb={4}
-                  width={isMobile ? '100%' : 'auto'}
+                  width="100%"
                 >
                   <FormLabel>ユーザー名</FormLabel>
                   <Input
@@ -174,16 +188,12 @@ export const Profile: FC<{
                   </FormErrorMessage>
                 </FormControl>
 
-                <FormControl
-                  id="bio"
-                  isInvalid={!!errors.bio}
-                  width={isMobile ? '100%' : 'auto'}
-                >
+                <FormControl id="bio" isInvalid={!!errors.bio} width="100%">
                   <FormLabel>自己紹介文</FormLabel>
                   <Textarea
                     size="lg"
                     placeholder="自己紹介文を入力してください"
-                    height={isMobile ? '150px' : '200px'}
+                    height={{ base: '150px', md: '200px' }}
                     {...register('bio')}
                     width="100%"
                   />
@@ -198,7 +208,7 @@ export const Profile: FC<{
               <Button
                 bg="black"
                 color="white"
-                width={isMobile ? '100%' : '50%'}
+                width={{ base: '100%', md: '50%' }}
                 mx="auto"
                 size="lg"
                 fontWeight="bold"
