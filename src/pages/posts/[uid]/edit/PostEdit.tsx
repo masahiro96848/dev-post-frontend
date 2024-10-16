@@ -54,7 +54,7 @@ export const PostEdit: FC<{
       title: post?.title ?? '',
       body: post?.body ?? '',
       imageUrl: post?.imageUrl ?? '',
-      isPublished: post?.isPublished ?? 0,
+      isPublished: post?.isPublished ?? 1,
     },
   })
 
@@ -93,7 +93,6 @@ export const PostEdit: FC<{
           console.error('画像のBase64変換エラー:', error)
         }
       }
-      setValue('isPublished', isPublished || 1)
 
       const handleResize = () => {
         setIsMobile(window.innerWidth < 768)
