@@ -183,6 +183,7 @@ export const PostEdit: FC<{
                     )}
                     <Input
                       id="image-upload"
+                      data-testid="image-upload"
                       type="file"
                       accept=".png, .jpg, .jpeg"
                       onChange={handleImageChange}
@@ -206,7 +207,12 @@ export const PostEdit: FC<{
 
               <Flex align="center" justify="space-between" mt={6}>
                 <FormControl display="flex" alignItems="center">
-                  <FormLabel fontWeight="600" color="gray.800" mb="0">
+                  <FormLabel
+                    htmlFor="isPublished"
+                    fontWeight="600"
+                    color="gray.800"
+                    mb="0"
+                  >
                     公開ステータス
                   </FormLabel>
                   <Switch
@@ -333,6 +339,7 @@ export const PostEdit: FC<{
                       )}
                       <Input
                         id="image-upload"
+                        data-testid="image-upload"
                         type="file"
                         accept=".png, .jpg, .jpeg"
                         onChange={handleImageChange}
@@ -349,7 +356,12 @@ export const PostEdit: FC<{
                   display="flex"
                   alignItems="center"
                 >
-                  <FormLabel fontWeight="600" color="gray.800" mb="0">
+                  <FormLabel
+                    htmlFor="isPublished"
+                    fontWeight="600"
+                    color="gray.800"
+                    mb="0"
+                  >
                     公開ステータス
                   </FormLabel>
                   <Switch
