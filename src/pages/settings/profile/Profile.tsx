@@ -159,6 +159,7 @@ export const Profile: FC<{
                     )}
                     <Input
                       id="image-upload"
+                      data-testid="image-upload"
                       type="file"
                       accept=".png, .jpg, .jpeg"
                       onChange={handleImageChange}
