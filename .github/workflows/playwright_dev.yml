@@ -30,8 +30,8 @@ jobs:
       # Docker コンテナの起動とデータベースのシード実行
       - name: Start Backend Services
         run: |
-          docker-compose up -d
-          docker-compose exec rails rails db:setup
+          docker compose up -d
+          docker compose exec rails rails db:seed
         working-directory: dev-post-backend
 
       # フロントエンドのコードをチェックアウト
