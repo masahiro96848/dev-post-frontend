@@ -1,7 +1,10 @@
 name: Frontend CI
 
 on:
-  push:
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
   lint:
@@ -66,4 +69,4 @@ jobs:
         run: npm run test-storybook:ci
 
   playwright-dev:
-    uses: ./.github/workflows/playwright.dev.yml
+    uses: ./.github/workflows/playwright_dev.yml
