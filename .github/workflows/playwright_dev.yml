@@ -23,7 +23,7 @@ jobs:
       - name: Build Backend Docker Image
         uses: docker/build-push-action@v4
         with:
-          context: ./dev-post-backend/rails
+          context: ./dev-post-backend
           file: ./dev-post-backend/rails/Dockerfile
           load: true
 
