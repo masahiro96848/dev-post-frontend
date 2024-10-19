@@ -5,13 +5,12 @@ on:
 
 jobs:
   lint:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: npm install
+      - name: Install dependencies
         run: npm install
 
       - name: Run lint
@@ -21,16 +20,18 @@ jobs:
         run: npm run format
 
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: ['20.x']
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -46,12 +47,6 @@ jobs:
       - name: Run Storybook and run tests
         run: npm run test-storybook:ci
 
-      # - name: Run Playwright tests
-      #   run: npx playwright test
-
-      # - uses: actions/upload-artifact@v4
-      #   if: ${{ !cancelled() }}
-      #   with:
-      #     name: playwright-report
-      #     path: playwright-report/
-      #     retention-days: 30
+  e2e:
+    needs: [test]
+    uses: ./.github/workflows/playwright.dev.yml
