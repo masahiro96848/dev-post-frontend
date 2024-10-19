@@ -5,12 +5,13 @@ on:
 
 jobs:
   lint:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: npm install
         run: npm install
 
       - name: Run lint
@@ -19,7 +20,24 @@ jobs:
       - name: Run format
         run: npm run format
 
+  build:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: npm install
+        run: npm install
+
+      - name: Run prebuild
+        run: npm run prebuild
+
+      - name: Run build
+        run: npm run build
+
   test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -47,6 +65,5 @@ jobs:
       - name: Run Storybook and run tests
         run: npm run test-storybook:ci
 
-  e2e:
-    needs: [test]
+  playwright-dev:
     uses: ./.github/workflows/playwright.dev.yml
