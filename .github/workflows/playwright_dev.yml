@@ -31,9 +31,8 @@ jobs:
       - name: Start Backend Services
         run: |
           docker compose up -d
-          docker compose exec rails /bin/bash
-          rails db:migrate
-          rails db:seed
+          docker compose exec rails rails db:migrate
+          docker compose exec rails rails db:seed
         working-directory: dev-post-backend
 
       # フロントエンドのコードをチェックアウト
