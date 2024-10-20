@@ -34,4 +34,8 @@ const SigninPage = () => {
   )
 }
 
+export const getServerSideProps = async () => {
+  return { props: {} }
+}
+
 export default SigninPage

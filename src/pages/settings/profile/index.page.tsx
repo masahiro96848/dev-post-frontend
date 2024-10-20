@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 import React from 'react'
-import { PostEdit } from './PostEdit'
+import { Profile } from './Profile'
 import {
-  usePagesPostEditIndexQuery,
-  usePagesPostEditMutation,
+  usePagesProfileEditIndexQuery,
+  usePagesProfileEditMutation,
 } from './index.gen'
 import { Loading } from '@/toastModal/Loading'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
@@ -11,27 +11,24 @@ import { useModalToast } from '@/toastModal/useModalToast'
 
 const Page = () => {
   const router = useRouter()
-  const { uid } = router.query
-
   const { showToastSuccess } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
-  const { data } = usePagesPostEditIndexQuery({
-    variables: {
-      uid: uid as string,
-    },
+  const { data } = usePagesProfileEditIndexQuery({
     fetchPolicy: 'cache-and-network',
     onError(e) {
       apolloErrorToast(e)
     },
   })
 
-  const [postEdit] = usePagesPostEditMutation({
+  const [profileEdit] = usePagesProfileEditMutation({
     onCompleted() {
-      showToastSuccess('記事を投稿しました')
+      showToastSuccess('プロフィールを更新しました')
       router.push('/dashboard')
     },
-    onError: apolloErrorToast,
+    onError(e) {
+      apolloErrorToast(e)
+    },
   })
 
   if (!data) {
@@ -39,24 +36,25 @@ const Page = () => {
   }
 
   return (
-    <PostEdit
+    <Profile
       viewer={data.viewer}
-      post={data.postEdit}
       onSubmit={(values) => {
-        postEdit({
+        profileEdit({
           variables: {
             input: {
-              title: values.title,
-              body: values.body,
+              name: values.name,
+              bio: values.bio,
               imageUrl: values.imageUrl,
-              isPublished: values.isPublished,
-              uid: uid as string,
             },
           },
         })
       }}
     />
   )
+}
+
+export const getServerSideProps = async () => {
+  return { props: {} }
 }
 
 export default Page

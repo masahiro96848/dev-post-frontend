@@ -35,4 +35,8 @@ const SignupPage: FC = () => {
   )
 }
 
+export const getServerSideProps = async () => {
+  return { props: {} }
+}
+
 export default SignupPage
