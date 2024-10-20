@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "prebuild": "npm run gen:graphql",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint --dir src",
     "format": "next lint --fix --dir src && prettier --write src",
     "gen:graphql": "graphql-codegen",
