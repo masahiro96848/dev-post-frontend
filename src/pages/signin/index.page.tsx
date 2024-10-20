@@ -1,32 +1,31 @@
 import { useRouter } from 'next/router'
-import React, { FC } from 'react'
-
-import { Signup } from './Signup'
-import { usePagesSignupMutation } from './index.gen'
+import React from 'react'
+import { Signin } from './Signin'
+import { usePagesSigninMutation } from './index.gen'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
 import { useModalToast } from '@/toastModal/useModalToast'
 
-const SignupPage: FC = () => {
+const SigninPage = () => {
   const router = useRouter()
   const { showToastSuccess } = useModalToast()
   const apolloErrorToast = useApolloErrorToast()
 
-  const [signup] = usePagesSignupMutation({
+  const [signin] = usePagesSigninMutation({
     onCompleted() {
-      showToastSuccess('ユーザー登録に成功しました。')
+      showToastSuccess('ログインに成功しました。')
       router.push('/posts')
     },
     onError: apolloErrorToast,
   })
+
   return (
-    <Signup
+    <Signin
       onSubmit={(values) => {
-        signup({
+        signin({
           variables: {
             input: {
               email: values.email,
               password: values.password,
-              passwordConfirmation: values.passwordConfirmation,
             },
           },
         })
@@ -35,4 +34,8 @@ const SignupPage: FC = () => {
   )
 }
 
-export default SignupPage
+export const getServerSideProps = async () => {
+  return { props: {} }
+}
+
+export default SigninPage

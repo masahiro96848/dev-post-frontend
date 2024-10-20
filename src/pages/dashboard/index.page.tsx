@@ -1,16 +1,19 @@
-import { Spinner, Center } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React, { useState, useMemo, useEffect } from 'react'
-import { Posts } from './Posts'
-import { usePagesPostsIndexQuery, usePagesPostsSortMutation } from './index.gen'
+import { Dashboard } from './Dashboard'
+import {
+  usePagesDashboardIndexQuery,
+  usePagesDashboardMypostsSortMutation,
+} from './index.gen'
 import { Loading } from '@/toastModal/Loading'
 import { useApolloErrorToast } from '@/toastModal/useApolloErrorToast'
 import { Post } from '@/types/graphql.gen'
 
-const PostsPage: NextPage = () => {
+const Page: NextPage = () => {
   const router = useRouter()
   const { query } = router
+
   const apolloErrorToast = useApolloErrorToast()
 
   const postsPerPage = 12
@@ -32,29 +35,31 @@ const PostsPage: NextPage = () => {
     [currentPage, postsPerPage],
   )
 
-  // 初期データ取得クエリ
-  const { data: indexData, loading: indexLoading } = usePagesPostsIndexQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      limit: postsPerPage,
-      offset,
-    },
-    onError(e) {
-      apolloErrorToast(e)
-    },
-  })
+  const { data: indexData, loading: indexLoading } =
+    usePagesDashboardIndexQuery({
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        limit: postsPerPage,
+        offset,
+      },
+      onError(e) {
+        apolloErrorToast(e)
+        router.push('/signin')
+      },
+    })
 
   // ソート用ミューテーション
-  const [postSort, { loading: sortLoading }] = usePagesPostsSortMutation({
-    onCompleted: (data) => {
-      setSortedPosts(data.postSort?.posts || [])
-    },
-    onError: apolloErrorToast,
-  })
+  const [mypostSort, { loading: sortLoading }] =
+    usePagesDashboardMypostsSortMutation({
+      onCompleted: (data) => {
+        setSortedPosts(data.mypostSort.myposts || [])
+      },
+      onError: apolloErrorToast,
+    })
 
   // クエリパラメータに基づいてソートとページングを実行
   useEffect(() => {
-    postSort({
+    mypostSort({
       variables: {
         sortBy,
         order,
@@ -62,21 +67,10 @@ const PostsPage: NextPage = () => {
         offset,
       },
     })
-  }, [sortBy, order, currentPage, offset, postSort, postsPerPage])
+  }, [sortBy, order, currentPage, offset, mypostSort, postsPerPage])
 
-  // データ取得中にスピナーを表示
   if (indexLoading || sortLoading) {
-    return (
-      <Center height="100vh">
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    )
+    return <Loading />
   }
 
   if (!indexData) {
@@ -84,10 +78,9 @@ const PostsPage: NextPage = () => {
   }
 
   return (
-    <Posts
+    <Dashboard
       viewer={indexData.viewer}
-      posts={sortedPosts.length > 0 ? sortedPosts : indexData.posts}
-      totalPosts={indexData.totalPosts}
+      myposts={sortedPosts.length > 0 ? sortedPosts : indexData.myposts}
       currentPage={currentPage}
       postsPerPage={postsPerPage}
       setCurrentPage={setCurrentPage}
@@ -97,4 +90,7 @@ const PostsPage: NextPage = () => {
   )
 }
 
-export default PostsPage
+export const getServerSideProps = async () => {
+  return { props: {} }
+}
+export default Page

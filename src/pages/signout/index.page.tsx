@@ -40,4 +40,8 @@ const Page: FC = () => {
   return <SignoutPage />
 }
 
+export const getServerSideProps = async () => {
+  return { props: {} }
+}
+
 export default Page

@@ -56,7 +56,12 @@ const base64Image =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII='
 
 // Base64をFileオブジェクトに変換する関数
-const base64ToFile = (base64: string, filename: string): File => {
+const base64ToFile = (base64: string, filename: string): File | null => {
+  if (typeof window === 'undefined') {
+    // サーバーサイドでは File オブジェクトを生成できないため null を返す
+    return null
+  }
+
   const arr = base64.split(',')
   const mimeMatch = arr[0].match(/:(.*?);/)
   const mime = mimeMatch ? mimeMatch[1] : ''
@@ -79,36 +84,49 @@ export const InputFilled: Story = {
   play: async ({ canvasElement, step, args }) => {
     const canvas = within(canvasElement)
 
-    await step('Input Form', async () => {
-      await userEvent.clear(canvas.getByLabelText('ユーザー名'))
-      await userEvent.type(canvas.getByLabelText('ユーザー名'), 'Dummy User')
+    // mockImageが存在するか確認
+    if (mockImage) {
+      await step('Input Form', async () => {
+        await userEvent.clear(canvas.getByLabelText('ユーザー名'))
+        await userEvent.type(canvas.getByLabelText('ユーザー名'), 'Dummy User')
 
-      await userEvent.clear(canvas.getByLabelText('自己紹介文'))
-      await userEvent.type(canvas.getByLabelText('自己紹介文'), 'Hello World!')
+        await userEvent.clear(canvas.getByLabelText('自己紹介文'))
+        await userEvent.type(
+          canvas.getByLabelText('自己紹介文'),
+          'Hello World!',
+        )
 
-      await step('Upload Image', async () => {
-        const fileInput = canvas.getByTestId('image-upload') as HTMLInputElement
+        await step('Upload Image', async () => {
+          const fileInput = canvas.getByTestId(
+            'image-upload',
+          ) as HTMLInputElement
 
-        // Upload the mock image
-        await userEvent.upload(fileInput, mockImage)
+          // モック画像をアップロード
+          await userEvent.upload(fileInput, mockImage)
 
-        // Verify the upload
-        expect(fileInput.files?.[0]).toStrictEqual(mockImage)
-        expect(fileInput.files?.length).toBe(1)
-      })
-    })
-
-    await step('Submit Form', async () => {
-      await userEvent.click(
-        canvas.getByRole('button', { name: 'プロフィールを変更する' }),
-      )
-      await waitFor(() => {
-        expect(args.onSubmit).toHaveBeenCalledWith({
-          name: 'Dummy User',
-          bio: 'Hello World!',
-          imageUrl: base64Image,
+          // アップロードが成功したことを確認
+          expect(fileInput.files?.[0]).toStrictEqual(mockImage)
+          expect(fileInput.files?.length).toBe(1)
         })
       })
-    })
+
+      await step('Submit Form', async () => {
+        await userEvent.click(
+          canvas.getByRole('button', { name: 'プロフィールを変更する' }),
+        )
+        await waitFor(() => {
+          expect(args.onSubmit).toHaveBeenCalledWith({
+            name: 'Dummy User',
+            bio: 'Hello World!',
+            imageUrl: base64Image,
+          })
+        })
+      })
+    } else {
+      // サーバーサイドの場合の処理（テストをスキップ）
+      console.warn(
+        'サーバーサイド環境のため、画像アップロードのテストをスキップします。',
+      )
+    }
   },
 }
