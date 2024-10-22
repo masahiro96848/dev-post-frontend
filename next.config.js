@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ['page.tsx'],
+  env: {
+    ...require(`./config/${process.env.APP_ENV || 'local'}.json`),
+  },
 }
 
-export default nextConfig
+module.exports = nextConfig

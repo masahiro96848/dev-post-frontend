@@ -50,11 +50,7 @@ jobs:
       # フロントエンドの依存関係をインストール
       - name: Install Frontend Dependencies
         run: npm install
-
         working-directory: dev-post-frontend
-      - name: Set Environment Variables
-        run: |
-          echo "NEXT_PUBLIC_API_HOST=http://localhost:3000/graphql" >> $GITHUB_ENV
 
       # Playwright のインストール
       - name: Install Playwright
