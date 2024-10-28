@@ -1,33 +1,17 @@
 import { test, expect } from '@playwright/test'
 
 test('ログイン後、記事一覧ページに遷移する', async ({ page }) => {
-  await page.goto('http://localhost:3001/signin')
+  const authEmail = process.env.AUTH_EMAIL || 'sample01@test.com'
+  const authPassword = process.env.AUTH_PASSWORD || 'password'
 
-  // コンソールメッセージをキャプチャ
-  page.on('console', (msg) => {
-    console.log(`Console message: [${msg.type()}] ${msg.text()}`)
-  })
+  const signinUrl = 'http://localhost:3001/signin'
+  const postsUrl = 'http://localhost:3001/posts'
 
-  // ページエラーをキャプチャ
-  page.on('pageerror', (error) => {
-    console.log(`Page error: ${error.message}`)
-  })
+  await page.goto(signinUrl)
 
-  // ネットワークリクエストをキャプチャ
-  page.on('request', (request) => {
-    console.log(`Request: ${request.method()} ${request.url()}`)
-  })
-
-  // ネットワークリスポンスをキャプチャ
-  page.on('response', (response) => {
-    console.log(`Response: ${response.status()} ${response.url()}`)
-  })
-
-  await page
-    .getByRole('textbox', { name: 'メールアドレス' })
-    .fill('sample01@test.com')
-  await page.getByRole('textbox', { name: 'パスワード' }).fill('password')
+  await page.getByRole('textbox', { name: 'メールアドレス' }).fill(authEmail)
+  await page.getByRole('textbox', { name: 'パスワード' }).fill(authPassword)
   await page.getByRole('button', { name: 'ログイン' }).click()
 
-  await expect(page).toHaveURL('http://localhost:3001/posts')
+  await expect(page).toHaveURL(postsUrl)
 })
