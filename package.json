@@ -15,7 +15,8 @@
     "test-storybook": "test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npm run build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && npm run test-storybook\"",
     "build-storybook": "storybook build",
-    "test-playwright": "playwright test"
+    "test-playwright": "playwright test",
+    "test-playwright:ui": "npx playwright test --ui"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
