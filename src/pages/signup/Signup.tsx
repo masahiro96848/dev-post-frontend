@@ -77,10 +77,11 @@ export const Signup: FC<{ onSubmit: (values: FormValues) => void }> = ({
                 </FormErrorMessage>
               </FormControl>
               <FormControl id="password" mt="6" isInvalid={!!errors.password}>
-                <FormLabel fontWeight="600" color="gray.800">
+                <FormLabel htmlFor="password" fontWeight="600" color="gray.800">
                   パスワード
                 </FormLabel>
                 <Input
+                  id="password"
                   type="password"
                   size="lg"
                   placeholder="パスワードを入力"
@@ -98,11 +99,16 @@ export const Signup: FC<{ onSubmit: (values: FormValues) => void }> = ({
                 mt="6"
                 isInvalid={!!errors.passwordConfirmation}
               >
-                <FormLabel fontWeight="600" color="gray.800">
+                <FormLabel
+                  htmlFor="passwordConfirmation"
+                  fontWeight="600"
+                  color="gray.800"
+                >
                   パスワード再確認
                 </FormLabel>
                 <Input
                   type="password"
+                  id="passwordConfirmation"
                   size="lg"
                   placeholder="パスワードを再確認"
                   px={4}
